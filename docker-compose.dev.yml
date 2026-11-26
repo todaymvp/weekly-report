@@ -1,0 +1,43 @@
+services:
+  weekly-report:
+    build: .
+    image: hjsec-study:dev
+    container_name: weekly-report-dev
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-3001}:3000"
+    environment:
+      TZ: Asia/Shanghai
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      SEED_DEMO: ${SEED_DEMO}
+      COOKIE_SECURE: "${COOKIE_SECURE}"
+      TRUST_PROXY: "${TRUST_PROXY}"
+      DEV_CODE_HINT: "${DEV_CODE_HINT}"
+      
+      # 透传邮件配置
+      MAIL_MODE: "${MAIL_MODE}"
+      SMTP_HOST: "${SMTP_HOST}"
+      SMTP_PORT: "${SMTP_PORT}"
+      SMTP_SECURE: "${SMTP_SECURE}"
+      SMTP_USER: "${SMTP_USER}"
+      SMTP_PASS: "${SMTP_PASS}"
+      MAIL_FROM: "${MAIL_FROM}"
+      # 邮件里「查看并回复」链接的站点地址，如 https://study.hjsec.top（留空则不带链接）
+      SITE_URL: "${SITE_URL:-}"
+      # 日志级别：debug / info / warn / error（docker logs 里看访问与审计日志）
+      LOG_LEVEL: "${LOG_LEVEL:-info}"
+    volumes:
+      - ${DATA_PATH:-./data-dev}:/app/data
+      # 本地开发：源码直接挂进容器，改代码后 `./start_dev.sh restart` 即可生效，不用重建镜像
+      - ./server.js:/app/server.js:ro
+      - ./src:/app/src:ro
+      - ./public:/app/public:ro
+      - ./VERSION:/app/VERSION:ro
+      - ./appsettings.json:/app/appsettings.json:ro
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

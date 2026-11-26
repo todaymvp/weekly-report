@@ -1,0 +1,36 @@
+services:
+  weekly-report:
+    image: gitea.hjsec.top/hjsec/hjsec_study:${IMAGE_TAG:-latest}
+    container_name: weekly-report
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      TZ: Asia/Shanghai
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      SEED_DEMO: "${SEED_DEMO:-false}"
+      COOKIE_SECURE: "${COOKIE_SECURE:-true}"
+      TRUST_PROXY: "${TRUST_PROXY:-true}"
+      DEV_CODE_HINT: "${DEV_CODE_HINT:-false}"
+      
+      # 透传邮件配置
+      MAIL_MODE: "${MAIL_MODE:-smtp}"
+      SMTP_HOST: "${SMTP_HOST}"
+      SMTP_PORT: "${SMTP_PORT}"
+      SMTP_SECURE: "${SMTP_SECURE}"
+      SMTP_USER: "${SMTP_USER}"
+      SMTP_PASS: "${SMTP_PASS}"
+      MAIL_FROM: "${MAIL_FROM}"
+      # 邮件里「查看并回复」链接的站点地址，如 https://study.hjsec.top（留空则不带链接）
+      SITE_URL: "${SITE_URL:-}"
+      # 日志级别：debug / info / warn / error（docker logs 里看访问与审计日志）
+      LOG_LEVEL: "${LOG_LEVEL:-info}"
+    volumes:
+      - ${DATA_PATH:-/data/study}:/app/data
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

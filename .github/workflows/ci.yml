@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install deps
+        run: npm ci || npm install
+
+      - name: Syntax check (all JS)
+        run: |
+          fail=0
+          for f in server.js $(git ls-files 'src/**/*.js') $(git ls-files 'public/js/**/*.js'); do
+            node --check "$f" || { echo "SYNTAX FAIL: $f"; fail=1; }
+          done
+          exit $fail
+
+      - name: Boot smoke test
+        run: |
+          mkdir -p "$RUNNER_TEMP/data"
+          # 注意：服务端读的是 PORT（不是 APP_PORT），APP_PORT 只是 compose 的端口映射变量
+          PORT=3009 \
+          DATA_DIR="$RUNNER_TEMP/data" \
+          ADMIN_PASSWORD="ci-test-pass" \
+          ADMIN_USERNAME="admin" \
+          MAIL_MODE="console" \
+          DEV_CODE_HINT="true" \
+          COOKIE_SECURE="false" \
+          node server.js > "$RUNNER_TEMP/server.log" 2>&1 &
+          for i in $(seq 1 30); do
+            sleep 1
+            if curl -sf http://127.0.0.1:3009/api/health > /tmp/health.json; then
+              echo "health: $(cat /tmp/health.json)"
+              exit 0
+            fi
+          done
+          echo "server did not come up"; tail -80 "$RUNNER_TEMP/server.log"; exit 1
+
+      - name: Verify docker build (no push)
+        run: docker build -t weekly-report:ci . >/dev/null

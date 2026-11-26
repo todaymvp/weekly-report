@@ -1,0 +1,355 @@
+/* ============================================================
+ * HJSEC · Cupertino Design System — Tokens
+ * 数值全部提取自 extra_repo/obsidian-cupertino（v4.1.2）
+ *   theme.css         : color-base 灰阶 / accent / code / shadow
+ *   src/app/root.scss : 字体、圆角、动画、blur
+ *   src/editor/*      : 排版节奏 p-spacing / line-height
+ * 中性灰白原生应用体系 —— 不使用浅蓝玻璃、不使用大面积渐变
+ * ============================================================ */
+
+:root {
+  /* ---------- Cupertino 灰阶（theme.css .theme-light） ---------- */
+  --cup-base-00: #fdfdfd;
+  --cup-base-05: #fcfcfc;
+  --cup-base-10: #f8f8f8;
+  --cup-base-20: #f5f5f5;
+  --cup-base-25: #f2f2f2;
+  --cup-base-30: #ebebeb;
+  --cup-base-35: #e4e4e4;
+  --cup-base-40: #d7d7d7;
+  --cup-base-50: #b1b1b1;
+  --cup-base-60: #8c8c8c;
+  --cup-base-70: #747474;
+  --cup-base-100: #3d3d3d;
+
+  /* ---------- Surface ---------- */
+  --cup-bg-primary: var(--cup-base-00);      /* 正文 / 编辑区 */
+  --cup-bg-primary-alt: var(--cup-base-20);  /* 引用块填充（Cupertino background-primary-alt） */
+  --cup-bq-bar: var(--cup-base-40);          /* 引用块内竖线（background-modifier-border-hover） */
+  --cup-bg-secondary: var(--cup-base-10);    /* 内容外围 */
+  --cup-bg-tertiary: var(--cup-base-30);     /* 侧栏 / 工具栏 */
+  --cup-bg-elevated: var(--cup-base-05);     /* 弹窗 / 菜单 */
+  --cup-bg-hover: var(--cup-base-25);
+  --cup-bg-active: var(--cup-base-35);
+  --cup-bg-input: var(--cup-base-00);
+
+  /* ---------- Text ---------- */
+  --cup-text-primary: var(--cup-base-100);
+  --cup-text-secondary: var(--cup-base-70);
+  --cup-text-muted: var(--cup-base-60);
+  --cup-text-faint: var(--cup-base-50);
+
+  /* ---------- Border ---------- */
+  --cup-border: var(--cup-base-40);
+  --cup-border-subtle: var(--cup-base-35);
+
+  /* ---------- Accent（Cupertino light: --color-blue） ---------- */
+  --cup-accent: #6aadfa;
+  --cup-accent-hover: #549ae8;
+  --cup-accent-soft: rgba(106, 173, 250, 0.14);
+
+  /* ---------- 语义色（Cupertino light） ---------- */
+  --cup-red: #fe7070;
+  --cup-orange: #f29a64;
+  --cup-yellow: #e0cd63;
+  --cup-green: #4ad55f;
+  --cup-cyan: #38dbd6;
+  --cup-purple: #bb9ef5;
+  --cup-pink: #f37db7;
+
+  /* ---------- Radius（root.scss + theme.css） ---------- */
+  --cup-radius-xs: 4px;
+  --cup-radius-sm: 8px;
+  --cup-radius-md: 16px;
+  --cup-radius-lg: 24px;
+  --cup-radius-xl: 32px;
+  --cup-radius-pill: 999px;
+
+  /* ---------- Motion ---------- */
+  --cup-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --cup-dur-fast: 160ms;
+  --cup-dur-base: 180ms;
+  --cup-dur-panel: 320ms;
+
+  /* ---------- Typography ---------- */
+  --cup-font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui, sans-serif;
+  --cup-font-mono: 'SFMono-Regular', 'SF Mono', 'JetBrains Mono', 'Fira Code',
+    ui-monospace, Menlo, Consolas, monospace;
+  --cup-text-size: 16px;
+  --cup-line-height: 1.625;
+  --cup-p-spacing: 1.25em;
+  --cup-fs-ui-smaller: 12px;
+  --cup-fs-ui-small: 13px;
+  --cup-fs-ui-medium: 15px;
+  --cup-fs-ui-large: 20px;
+
+  /* ---------- Shadow（theme.css 精确值） ---------- */
+  --cup-shadow-s:
+    0 0 0 1px hsl(0 0% 0% / 0.05),
+    0 2px 2px hsl(0 0% 0% / 0.05),
+    0 4px 8px hsl(0 0% 0% / 0.025);
+  --cup-shadow-l:
+    0 0 0 1px hsl(0 0% 0% / 0.05),
+    0 1px 2px -1px hsl(0 0% 0% / 0.05),
+    0 2px 4px hsl(0 0% 0% / 0.05),
+    0 12px 24px -16px hsl(0 0% 15% / 0.15);
+
+  /* ---------- Code（theme.css .theme-light） ---------- */
+  --cup-code-bg: var(--cup-base-10);
+  --cup-code-border: var(--cup-base-35);
+  --cup-code-normal: #1f2328;
+  --cup-code-comment: #6e7781;
+  --cup-code-function: #8250df;
+  --cup-code-keyword: #cf222e;
+  --cup-code-property: #953800;
+  --cup-code-string: #0a3069;
+  --cup-code-tag: #116329;
+  --cup-code-value: #098658;
+
+  /* ============================================================
+   * 兼容层：让既有 6800 行 JS 与旧组件直接继承 Cupertino
+   * ============================================================ */
+  --bg: var(--cup-bg-primary);
+  --surface-2: var(--cup-bg-hover);
+  --surface-3: var(--cup-bg-tertiary);
+  --border: var(--cup-border);
+  --border-muted: var(--cup-border-subtle);
+  --text: var(--cup-text-primary);
+  --text-2: var(--cup-text-secondary);
+  --text-3: var(--cup-text-muted);
+  --primary: var(--cup-accent);
+  --primary-hover: var(--cup-accent-hover);
+  --primary-soft: var(--cup-accent-soft);
+  --success: var(--cup-green);
+  --warning: var(--cup-orange);
+  --danger: var(--cup-red);
+  --info: var(--cup-accent);
+  --radius: var(--cup-radius-sm);
+  --radius-md: var(--cup-radius-md);
+  --radius-lg: var(--cup-radius-lg);
+  --font: var(--cup-font);
+  --mono: var(--cup-font-mono);
+  --header-h: 44px;
+  --sidebar-w: 208px;
+}
+
+/* ============================================================
+ * Dark —— theme.css .theme-dark（各层级独立明度，非简单反色）
+ * ============================================================ */
+[data-theme='dark'] {
+  --cup-base-00: #161616;
+  --cup-base-05: #171717;
+  --cup-base-10: #181818;
+  --cup-base-20: #1c1c1c;
+  --cup-base-25: #222222;
+  --cup-base-30: #292929;
+  --cup-base-35: #303030;
+  --cup-base-40: #383838;
+  --cup-base-50: #555555;
+  --cup-base-60: #6e6e6e;
+  --cup-base-70: #898989;
+  --cup-base-100: #c1c1c1;
+
+  --cup-bg-primary: var(--cup-base-00);
+  --cup-bg-primary-alt: var(--cup-base-20);
+  --cup-bq-bar: var(--cup-base-40);
+  --cup-bg-secondary: var(--cup-base-10);
+  --cup-bg-tertiary: var(--cup-base-25);
+  --cup-bg-elevated: var(--cup-base-20);
+  --cup-bg-hover: var(--cup-base-25);
+  --cup-bg-active: var(--cup-base-35);
+  --cup-bg-input: var(--cup-base-20);
+
+  --cup-text-primary: var(--cup-base-100);
+  --cup-text-secondary: var(--cup-base-70);
+  --cup-text-muted: var(--cup-base-60);
+  --cup-text-faint: var(--cup-base-50);
+
+  --cup-border: var(--cup-base-40);
+  --cup-border-subtle: var(--cup-base-35);
+
+  --cup-accent: #5694da;
+  --cup-accent-hover: #6ba6e8;
+  --cup-accent-soft: rgba(86, 148, 218, 0.18);
+
+  --cup-red: #d95a5f;
+  --cup-orange: #db8650;
+  --cup-yellow: #c4b45e;
+  --cup-green: #48c45a;
+  --cup-cyan: #3fbab6;
+  --cup-purple: #8e7dc2;
+  --cup-pink: #de6793;
+
+  --cup-shadow-s:
+    0 0 0 1px hsl(0 0% 100% / 0.07),
+    0 8px 24px hsl(0 0% 0% / 0.10),
+    0 8px 8px hsl(0 0% 0% / 0.10),
+    0 4px 12px -4px hsl(0 0% 0% / 0.35);
+  --cup-shadow-l:
+    0 0 0 1px hsl(0 0% 100% / 0.07),
+    0 1px 2px -1px hsl(0 0% 0% / 0.10),
+    0 2px 4px hsl(0 0% 0% / 0.10),
+    0 12px 24px -16px hsl(0 0% 15% / 0.35);
+
+  --cup-code-bg: var(--cup-base-10);
+  --cup-code-border: var(--cup-base-35);
+  --cup-code-normal: #c9d1d9;
+  --cup-code-comment: #8b949e;
+  --cup-code-function: #d2a8ff;
+  --cup-code-keyword: #ff7b72;
+  --cup-code-property: #ffa657;
+  --cup-code-string: #a5d6ff;
+  --cup-code-tag: #7ee787;
+  --cup-code-value: #b5cea8;
+
+  --success: var(--cup-green);
+  --warning: var(--cup-orange);
+  --danger: var(--cup-red);
+}
+
+/* ============================================================
+ * Base —— 纯色平面，无渐变、无玻璃
+ * ============================================================ */
+* { box-sizing: border-box; }
+
+html {
+  background: var(--cup-bg-secondary);
+  color-scheme: light;
+}
+[data-theme='dark'] html { color-scheme: dark; }
+
+body,
+[data-ui='zhihu'] body,
+[data-ui='github'] body {
+  margin: 0;
+  font-family: var(--cup-font);
+  font-size: var(--cup-fs-ui-small);
+  line-height: 1.55;
+  color: var(--cup-text-primary);
+  background: var(--cup-bg-secondary) !important;
+  background-image: none !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 清除历史装饰层（Nature Glass 的网格 / 光晕 / 山峦） */
+body::before,
+body::after,
+[data-ui] body::before,
+[data-ui] body::after { display: none !important; content: none !important; }
+
+#root, #modal-root, #toast-wrap { position: relative; }
+
+a { color: var(--cup-accent); text-decoration: none; }
+a:hover { color: var(--cup-accent-hover); }
+
+::selection { background: var(--cup-accent-soft); }
+
+/* 滚动条：macOS 覆盖式细条 */
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--cup-base-50);
+  border-radius: var(--cup-radius-pill);
+  border: 3px solid transparent;
+  background-clip: content-box;
+  opacity: .6;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--cup-base-60); background-clip: content-box; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* ============================================================
+ * 内部别名层
+ * 早期模块（components / editor / auth / codeblock / responsive）
+ * 使用短变量名，这里统一映射到 Cupertino Token，避免大范围改写
+ * ============================================================ */
+:root {
+  /* 间距 */
+  --sp-1: 4px;  --sp-2: 6px;  --sp-3: 8px;  --sp-4: 12px;
+  --sp-5: 16px; --sp-6: 20px; --sp-7: 24px; --sp-8: 32px;
+
+  /* 字号 */
+  --fs-xs: 11.5px; --fs-sm: 12.5px; --fs-base: 13px;
+  --fs-md: 14px; --fs-lg: 16px; --fs-xl: 20px;
+
+  /* 字体 */
+  --font-ui: var(--cup-font);
+  --font-text: var(--cup-font);
+  --font-mono: var(--cup-font-mono);
+  --line-height: var(--cup-line-height);
+  --p-spacing: var(--cup-p-spacing);
+
+  /* 圆角 */
+  --r-xs: var(--cup-radius-xs);
+  --r-sm: var(--cup-radius-sm);
+  --r-md: var(--cup-radius-md);
+  --r-lg: var(--cup-radius-lg);
+  --r-xl: var(--cup-radius-xl);
+  --r-pill: var(--cup-radius-pill);
+
+  /* 动效 */
+  --ease: var(--cup-ease);
+  --dur-fast: var(--cup-dur-fast);
+  --dur-base: var(--cup-dur-base);
+  --dur-panel: var(--cup-dur-panel);
+
+  /* 表面 / 文字 / 边框 */
+  --bg-page: var(--cup-bg-secondary);
+  --bg-canvas: var(--cup-bg-primary);
+  --bg-panel: var(--cup-bg-primary);
+  --bg-elevated: var(--cup-bg-elevated);
+  --bg-hover: var(--cup-bg-hover);
+  --bg-active: var(--cup-bg-active);
+  --bg-sunken: var(--cup-bg-tertiary);
+  --bg-sidebar: transparent;
+
+  --fg-primary: var(--cup-text-primary);
+  --fg-secondary: var(--cup-text-secondary);
+  --fg-tertiary: var(--cup-text-muted);
+  --fg-inverse: #ffffff;
+  --fg-link: var(--cup-accent);
+
+  --line: var(--cup-border);
+  --line-soft: var(--cup-border-subtle);
+  --line-strong: var(--cup-base-50);
+
+  --brand: var(--cup-accent);
+  --brand-hover: var(--cup-accent-hover);
+  --brand-soft: var(--cup-accent-soft);
+  --brand-contrast: #ffffff;
+
+  --success-soft: rgba(74, 213, 95, .14);
+  --warning-soft: rgba(242, 154, 100, .16);
+  --danger-soft: rgba(254, 112, 112, .14);
+  --info-soft: var(--cup-accent-soft);
+
+  /* 阴影：统一收敛到 Cupertino 两级 */
+  --shadow-xs: none;
+  --shadow-sm: var(--cup-shadow-s);
+  --shadow-md: var(--cup-shadow-s);
+  --shadow-lg: var(--cup-shadow-l);
+  --shadow-ring: 0 0 0 1px var(--cup-border-subtle);
+
+  /* 代码 */
+  --code-bg: var(--cup-code-bg);
+  --code-head: var(--cup-bg-hover);
+  --code-line: var(--cup-code-border);
+  --code-fg: var(--cup-code-normal);
+  --code-kw: var(--cup-code-keyword);
+  --code-str: var(--cup-code-string);
+  --code-fn: var(--cup-code-function);
+  --code-com: var(--cup-code-comment);
+  --code-num: var(--cup-code-value);
+  --code-ln: var(--cup-base-50);
+
+  /* 历史玻璃变量：全部降级为纯色（禁止毛玻璃） */
+  --glass-bg: var(--cup-bg-tertiary);
+  --glass-blur: none;
+}

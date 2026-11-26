@@ -1,0 +1,237 @@
+/* ==========================================================================
+   Zhihu 风格皮肤（[data-ui="zhihu"] 时生效，GitHub 皮肤保持原样）
+   ========================================================================== */
+[data-ui='zhihu'] {
+  --zh-bg: #f6f7f8;
+  --zh-card: #ffffff;
+  --zh-text: #181818;
+  --zh-text-2: #444444;
+  --zh-muted: #8590a6;
+  --zh-border: #ebebeb;
+  --zh-blue: #1677ff;
+  --zh-green: #00a67d;
+  --zh-subtle: #f6f6f6;
+  --zh-hover: #fafafa;
+  --zh-blue-soft: #e8f3ff;
+  --sidebar-w: 0;
+}
+
+[data-ui='zhihu'] body {
+  background: var(--zh-bg);
+  color: var(--zh-text);
+  font-size: 14px;
+}
+
+/* 顶部横向导航 */
+[data-ui='zhihu'] .zh-header {
+  position: sticky; top: 0; z-index: 40;
+  height: 52px; background: var(--zh-card); border-bottom: 1px solid var(--zh-border);
+  display: flex; align-items: center;
+}
+[data-ui='zhihu'] .zh-header-inner {
+  width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 16px;
+  display: flex; align-items: center; gap: 20px;
+}
+[data-ui='zhihu'] .zh-logo { display: inline-flex; align-items: center; gap: 8px; color: var(--zh-text); text-decoration: none; }
+[data-ui='zhihu'] .zh-logo img { width: 26px; height: 26px; border-radius: 4px; object-fit: contain; }
+[data-ui='zhihu'] .zh-logo b { font-size: 16px; font-weight: 600; letter-spacing: -.2px; }
+[data-ui='zhihu'] .zh-nav { display: flex; align-items: center; gap: 4px; }
+[data-ui='zhihu'] .zh-nav a {
+  padding: 0 12px; height: 52px; display: inline-flex; align-items: center;
+  font-size: 14px; color: var(--zh-text-2); text-decoration: none; position: relative;
+}
+[data-ui='zhihu'] .zh-nav a:hover { color: var(--zh-blue); }
+[data-ui='zhihu'] .zh-nav a.active { color: var(--zh-blue); font-weight: 500; }
+[data-ui='zhihu'] .zh-nav a.active::after {
+  content: ''; position: absolute; left: 12px; right: 12px; bottom: 0; height: 2px; background: var(--zh-blue);
+}
+[data-ui='zhihu'] .zh-search {
+  margin-left: auto; display: flex; align-items: center; gap: 6px;
+  width: 240px; height: 32px; padding: 0 10px;
+  background: var(--zh-subtle); border: 1px solid transparent; border-radius: 999px;
+  color: var(--zh-muted); font-size: 13px; cursor: pointer;
+}
+[data-ui='zhihu'] .zh-search:hover { background: var(--zh-card); border-color: var(--zh-border); }
+[data-ui='zhihu'] .zh-search svg { width: 14px; height: 14px; }
+[data-ui='zhihu'] .zh-actions { display: flex; align-items: center; gap: 8px; }
+[data-ui='zhihu'] .zh-btn {
+  height: 32px; padding: 0 14px; border-radius: 3px; border: 1px solid var(--zh-blue);
+  background: var(--zh-blue); color: #fff; font: 500 13px var(--font); cursor: pointer;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+[data-ui='zhihu'] .zh-btn:hover { background: #096dd9; color: #fff; text-decoration: none; }
+[data-ui='zhihu'] .zh-icon-btn {
+  width: 32px; height: 32px; display: grid; place-items: center; border-radius: 4px;
+  border: none; background: transparent; color: var(--zh-muted); cursor: pointer; position: relative;
+}
+[data-ui='zhihu'] .zh-icon-btn:hover { background: var(--zh-subtle); color: var(--zh-text-2); }
+[data-ui='zhihu'] .zh-icon-btn svg { width: 17px; height: 17px; }
+
+/* 页面容器：中间 800 + 右侧 300 */
+[data-ui='zhihu'] .zh-container {
+  max-width: 1200px; margin: 0 auto; padding: 12px 16px 40px;
+}
+[data-ui='zhihu'] .zh-layout {
+  display: grid; grid-template-columns: minmax(0, 800px) 300px; gap: 12px; align-items: start;
+  justify-content: center;
+}
+[data-ui='zhihu'] .zh-main { min-width: 0; }
+[data-ui='zhihu'] .zh-side { display: flex; flex-direction: column; gap: 12px; position: sticky; top: 64px; }
+
+/* 卡片：白底 + 细边 + 小圆角 */
+[data-ui='zhihu'] .zh-card {
+  background: var(--zh-card); border: 1px solid var(--zh-border); border-radius: 4px;
+}
+[data-ui='zhihu'] .zh-card + .zh-card { margin-top: 12px; }
+[data-ui='zhihu'] .zh-card-h {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 16px; border-bottom: 1px solid var(--zh-border);
+  font-size: 14px; font-weight: 600;
+}
+[data-ui='zhihu'] .zh-card-h .more { margin-left: auto; font-size: 12px; font-weight: 400; color: var(--zh-muted); }
+
+/* 发布入口 */
+[data-ui='zhihu'] .zh-publish { display: flex; align-items: center; gap: 10px; padding: 12px 16px; }
+[data-ui='zhihu'] .zh-publish .zh-avatar { width: 38px; height: 38px; }
+[data-ui='zhihu'] .zh-publish-entry {
+  flex: 1; height: 38px; border-radius: 999px; border: 1px solid var(--zh-border);
+  background: var(--zh-subtle); color: var(--zh-muted); font-size: 13px; display: flex; align-items: center;
+  padding: 0 14px; text-decoration: none;
+}
+[data-ui='zhihu'] .zh-publish-entry:hover { background: var(--zh-card); color: var(--zh-text-2); text-decoration: none; }
+
+/* 信息流条目：分割线，不做大卡片 */
+[data-ui='zhihu'] .zh-feed-item { padding: 14px 16px; border-bottom: 1px solid var(--zh-border); }
+[data-ui='zhihu'] .zh-feed-item:last-child { border-bottom: none; }
+[data-ui='zhihu'] .zh-feed-item:hover { background: var(--zh-hover); }
+[data-ui='zhihu'] .zh-feed-head { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--zh-muted); }
+[data-ui='zhihu'] .zh-feed-head b { color: var(--zh-text); font-weight: 500; }
+[data-ui='zhihu'] .zh-feed-head time { margin-left: auto; font-size: 12px; }
+[data-ui='zhihu'] .zh-avatar {
+  width: 32px; height: 32px; border-radius: 50%; overflow: hidden;
+  display: grid; place-items: center; color: #fff; font-size: 12px; font-weight: 600; flex: 0 0 auto;
+}
+[data-ui='zhihu'] .zh-avatar img { width: 100%; height: 100%; object-fit: cover; }
+[data-ui='zhihu'] .zh-feed-title {
+  display: block; margin: 10px 0 6px; font-size: 16px; font-weight: 600; line-height: 1.45;
+  color: var(--zh-text); letter-spacing: -.2px;
+}
+[data-ui='zhihu'] .zh-feed-title:hover { color: var(--zh-blue); text-decoration: none; }
+[data-ui='zhihu'] .zh-feed-text {
+  font-size: 14px; line-height: 1.7; color: var(--zh-text-2);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+[data-ui='zhihu'] .zh-feed-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+[data-ui='zhihu'] .zh-tag {
+  display: inline-block; padding: 1px 8px; border-radius: 2px;
+  background: var(--zh-subtle); color: var(--zh-muted); font-size: 12px;
+}
+[data-ui='zhihu'] .zh-tag.blue { background: var(--zh-blue-soft); color: var(--zh-blue); }
+[data-ui='zhihu'] .zh-actions-row {
+  display: flex; align-items: center; gap: 18px; margin-top: 10px; font-size: 13px; color: var(--zh-muted);
+}
+[data-ui='zhihu'] .zh-actions-row button, [data-ui='zhihu'] .zh-actions-row a {
+  border: none; background: none; color: inherit; cursor: pointer; font-size: inherit;
+  display: inline-flex; align-items: center; gap: 4px; text-decoration: none; padding: 0;
+}
+[data-ui='zhihu'] .zh-actions-row button:hover, [data-ui='zhihu'] .zh-actions-row a:hover { color: var(--zh-blue); }
+
+/* 右侧小卡 */
+[data-ui='zhihu'] .zh-side-card { background: var(--zh-card); border: 1px solid var(--zh-border); border-radius: 4px; }
+[data-ui='zhihu'] .zh-side-title { padding: 12px 14px; border-bottom: 1px solid var(--zh-border); font-size: 14px; font-weight: 600; }
+[data-ui='zhihu'] .zh-side-body { padding: 10px 14px; font-size: 13px; color: var(--zh-text-2); }
+[data-ui='zhihu'] .zh-side-item { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 13px; }
+[data-ui='zhihu'] .zh-side-item .n { color: var(--zh-muted); width: 14px; }
+[data-ui='zhihu'] .zh-side-item .v { margin-left: auto; font-size: 12px; color: var(--zh-muted); }
+
+/* 复用组件的知乎化：Box / table / tabs / 按钮 / 输入 */
+[data-ui='zhihu'] .Box { border-color: var(--zh-border); border-radius: 4px; }
+[data-ui='zhihu'] .Box-header { background: var(--zh-card); border-bottom-color: var(--zh-border); font-size: 14px; font-weight: 600; }
+[data-ui='zhihu'] .Box-row { border-bottom-color: var(--zh-border); }
+[data-ui='zhihu'] a.Box-row:hover { background: var(--zh-hover); }
+[data-ui='zhihu'] .issue-state { background: var(--zh-green); }
+[data-ui='zhihu'] .issue-title { font-size: 15px; font-weight: 600; }
+[data-ui='zhihu'] .issue-meta, [data-ui='zhihu'] .summary { color: var(--zh-muted); }
+[data-ui='zhihu'] .page-tabs { border-bottom-color: var(--zh-border); }
+[data-ui='zhihu'] .tab.active, [data-ui='zhihu'] .page-tabs .tab.active { color: var(--zh-blue); border-bottom-color: var(--zh-blue); }
+[data-ui='zhihu'] .btn { border-radius: 3px; border-color: var(--zh-border); background: var(--zh-card); }
+[data-ui='zhihu'] .btn:hover { background: var(--zh-subtle); }
+[data-ui='zhihu'] .btn.primary, [data-ui='zhihu'] .btn.blue { background: var(--zh-blue); border-color: var(--zh-blue); color: #fff; }
+[data-ui='zhihu'] .btn.primary:hover { background: #096dd9; }
+[data-ui='zhihu'] .input, [data-ui='zhihu'] .select, [data-ui='zhihu'] .textarea { border-color: var(--zh-border); border-radius: 3px; background: var(--zh-card); }
+[data-ui='zhihu'] .input:focus, [data-ui='zhihu'] .textarea:focus { border-color: var(--zh-blue); box-shadow: 0 0 0 2px rgba(22,119,255,.12); }
+[data-ui='zhihu'] .chip { border-radius: 2px; background: var(--zh-subtle); border-color: transparent; color: var(--zh-muted); }
+[data-ui='zhihu'] .chip.soft-primary { background: var(--zh-blue-soft); color: var(--zh-blue); }
+[data-ui='zhihu'] .stat-grid { border-color: var(--zh-border); }
+[data-ui='zhihu'] .stat { border-right-color: var(--zh-border); }
+[data-ui='zhihu'] .table th { background: var(--zh-subtle); border-bottom-color: var(--zh-border); }
+[data-ui='zhihu'] .table td { border-bottom-color: var(--zh-border); }
+[data-ui='zhihu'] .repo-title { font-size: 20px; }
+[data-ui='zhihu'] .repo-head { margin-bottom: 12px; }
+[data-ui='zhihu'] .feed-head h2 { font-size: 22px; }
+
+/* 详情页阅读体验 */
+[data-ui='zhihu'] .prose { font-size: 15px; line-height: 1.85; color: #1a1a1a; }
+[data-ui='zhihu'] .prose h1, [data-ui='zhihu'] .prose h2 { border-bottom: none; }
+[data-ui='zhihu'] .prose pre, [data-ui='zhihu'] .prose pre.code {
+  background: #1e1e1e; color: #e6e6e6; border: none; border-radius: 4px;
+}
+[data-ui='zhihu'] .prose pre code { color: #e6e6e6; background: none; }
+[data-ui='zhihu'] .detail-head h1 { font-size: 26px; }
+[data-ui='zhihu'] .comment { border-bottom-color: var(--zh-border); }
+
+/* 移动端 */
+@media (max-width: 1080px) {
+  [data-ui='zhihu'] .zh-layout { grid-template-columns: minmax(0, 1fr); }
+  [data-ui='zhihu'] .zh-side { display: none; }
+}
+@media (max-width: 720px) {
+  [data-ui='zhihu'] .zh-header-inner { gap: 10px; padding: 0 12px; }
+  [data-ui='zhihu'] .zh-nav { display: none; }
+  [data-ui='zhihu'] .zh-search { width: 32px; padding: 0; justify-content: center; }
+  [data-ui='zhihu'] .zh-search .zh-search-text { display: none; }
+  [data-ui='zhihu'] .zh-container { padding: 10px 10px 32px; }
+}
+
+
+/* ===== 知乎皮肤 · 夜间模式 ===== */
+[data-ui='zhihu'][data-theme='dark'] {
+  --zh-bg: #181818;
+  --zh-card: #232323;
+  --zh-subtle: #2b2b2b;
+  --zh-hover: #262626;
+  --zh-text: #e8e8e8;
+  --zh-text-2: #c8c8c8;
+  --zh-muted: #9aa0a6;
+  --zh-border: #303030;
+  --zh-blue: #4096ff;
+  --zh-blue-soft: #14283f;
+  --zh-green: #34c9a0;
+}
+[data-ui='zhihu'][data-theme='dark'] body { background: var(--zh-bg); color: var(--zh-text); }
+[data-ui='zhihu'][data-theme='dark'] .zh-header { background: var(--zh-card); border-bottom-color: var(--zh-border); }
+[data-ui='zhihu'][data-theme='dark'] .zh-nav a { color: var(--zh-text-2); }
+[data-ui='zhihu'][data-theme='dark'] .zh-nav a.active { color: var(--zh-blue); }
+[data-ui='zhihu'][data-theme='dark'] .zh-feed-item:hover,
+[data-ui='zhihu'][data-theme='dark'] a.Box-row:hover { background: var(--zh-hover); }
+[data-ui='zhihu'][data-theme='dark'] .zh-feed-title { color: var(--zh-text); }
+[data-ui='zhihu'][data-theme='dark'] .zh-feed-text { color: var(--zh-text-2); }
+[data-ui='zhihu'][data-theme='dark'] .zh-tag { background: var(--zh-subtle); color: var(--zh-muted); }
+[data-ui='zhihu'][data-theme='dark'] .zh-side-body { color: var(--zh-text-2); }
+[data-ui='zhihu'][data-theme='dark'] .zh-side-item a { color: var(--zh-blue); }
+[data-ui='zhihu'][data-theme='dark'] .zh-search { background: var(--zh-subtle); color: var(--zh-muted); }
+[data-ui='zhihu'][data-theme='dark'] .zh-search:hover { background: var(--zh-card); }
+[data-ui='zhihu'][data-theme='dark'] .prose { color: #d6d6d6; }
+[data-ui='zhihu'][data-theme='dark'] .chip { background: var(--zh-subtle); color: var(--zh-muted); }
+[data-ui='zhihu'][data-theme='dark'] .chip.soft-primary { background: var(--zh-blue-soft); color: var(--zh-blue); }
+[data-ui='zhihu'][data-theme='dark'] .btn { background: var(--zh-card); color: var(--zh-text); border-color: var(--zh-border); }
+[data-ui='zhihu'][data-theme='dark'] .btn:hover { background: var(--zh-subtle); }
+[data-ui='zhihu'][data-theme='dark'] .input,
+[data-ui='zhihu'][data-theme='dark'] .select,
+[data-ui='zhihu'][data-theme='dark'] .textarea { background: var(--zh-subtle); color: var(--zh-text); border-color: var(--zh-border); }
+[data-ui='zhihu'][data-theme='dark'] .table th { background: var(--zh-subtle); color: var(--zh-muted); }
+[data-ui='zhihu'][data-theme='dark'] .table td { border-bottom-color: var(--zh-border); }
+[data-ui='zhihu'][data-theme='dark'] .notif-unread { background: #1e2a3a; }
+[data-ui='zhihu'][data-theme='dark'] .dropdown,
+[data-ui='zhihu'][data-theme='dark'] .modal,
+[data-ui='zhihu'][data-theme='dark'] .cmd-panel { background: var(--zh-card); border-color: var(--zh-border); }
