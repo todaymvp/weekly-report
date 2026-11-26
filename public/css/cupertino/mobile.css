@@ -1,0 +1,230 @@
+/* ============================================================
+ * HJSEC · Cupertino — Mobile / Liquid Glass
+ * 取自 extra_repo/obsidian-cupertino/src/app/mobile.scss
+ *   · 悬浮胶囊工具栏:  border-radius:100vh; padding:10px; backdrop-filter
+ *   · 抽屉圆角卡片:    margin 8px + border-radius + raised shadow
+ *   · 触控行:          --touch-size-m 48px / --touch-size-l 52px
+ * 取自 src/elements/cupertino-mobile.scss
+ *   · Liquid Glass:    raised-blur + raised-shadow + 顶部高光
+ * ============================================================ */
+
+:root {
+  --cup-touch-m: 48px;
+  --cup-touch-l: 52px;
+  --cup-raised-blur: blur(20px) saturate(180%);
+  --cup-raised-bg: color-mix(in srgb, var(--cup-bg-secondary) 80%, transparent);
+  --cup-drawer-bg: color-mix(in srgb, var(--cup-bg-secondary) 97%, transparent);
+  --cup-raised-shadow:
+    0 0 0 1px hsl(0 0% 0% / 0.06),
+    0 8px 24px hsl(0 0% 0% / 0.1),
+    0 2px 6px hsl(0 0% 0% / 0.06);
+}
+
+[data-theme='dark'] {
+  --cup-raised-bg: color-mix(in srgb, var(--cup-base-20) 82%, transparent);
+  --cup-drawer-bg: color-mix(in srgb, var(--cup-base-20) 94%, transparent);
+  --cup-raised-shadow:
+    0 0 0 1px hsl(0 0% 100% / 0.08),
+    0 8px 24px hsl(0 0% 0% / 0.45),
+    0 2px 6px hsl(0 0% 0% / 0.3);
+}
+
+/* 桌面端不显示底部工具栏 */
+.m-dock { display: none; }
+
+@media (max-width: 900px) {
+  /* ---------- 底部悬浮胶囊工具栏 ---------- */
+  .m-dock {
+    position: fixed;
+    z-index: 60;
+    left: 12px;
+    right: 12px;
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: var(--cup-touch-l);
+    padding: 5px;
+    border-radius: 100vh;               /* = 源码 100vh 胶囊 */
+    background: var(--cup-raised-bg);
+    -webkit-backdrop-filter: var(--cup-raised-blur);
+    backdrop-filter: var(--cup-raised-blur);
+    box-shadow: var(--cup-raised-shadow);
+    border: 1px solid color-mix(in srgb, var(--cup-border-subtle) 55%, transparent);
+  }
+
+  /* 顶部高光：cupertino-mobile.scss 的 ::after HDR mask 简化版 */
+  .m-dock::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(to bottom, hsl(0 0% 100% / 0.16), transparent 46%);
+    opacity: .9;
+  }
+  [data-theme='dark'] .m-dock::after {
+    background: linear-gradient(to bottom, hsl(0 0% 100% / 0.07), transparent 46%);
+  }
+
+  .m-dock-item {
+    position: relative;
+    z-index: 1;
+    flex: 1 1 0;
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    border-radius: 100vh;
+    color: var(--cup-text-muted);
+    font-size: 10px;
+    line-height: 1.1;
+    letter-spacing: .01em;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: color var(--cup-dur-fast) var(--cup-ease),
+                background var(--cup-dur-fast) var(--cup-ease);
+  }
+  .m-dock-item svg { width: 20px; height: 20px; display: block; }
+  .m-dock-item:active { background: color-mix(in srgb, var(--cup-text-primary) 8%, transparent); }
+  .m-dock-item.active {
+    color: var(--cup-accent);
+    background: color-mix(in srgb, var(--cup-accent) 13%, transparent);
+  }
+  /* 主操作：写周报 */
+  .m-dock-primary .m-dock-ic {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 100vh;
+    background: var(--cup-accent);
+    color: #fff;
+  }
+  .m-dock-primary .m-dock-ic svg { width: 16px; height: 16px; }
+  .m-dock-primary { color: var(--cup-text-secondary); }
+
+  /* 给内容让出底部空间 */
+  body { padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px)); }
+
+  /* ---------- 顶栏：单行不换行，压掉搜索按钮 ---------- */
+  .gh-header,
+  .zh-header {
+    flex-wrap: nowrap !important;
+    overflow: hidden;
+  }
+  .gh-header .gh-search,
+  .gh-header .kbd,
+  .gh-header .ui-switch { display: none !important; }
+  .gh-header .gh-actions { gap: 2px; flex: 0 0 auto; margin-left: auto; }
+  .gh-header .gh-icon-btn { width: 32px; height: 32px; }
+  .gh-header .gh-burger { flex: 0 0 auto; }
+  .gh-header .gh-logo { flex: 0 0 auto; }
+
+  /* 单栏：去掉内容窗格左侧分隔线，正文左右留白交给卡片 */
+  .gh-main,
+  .zh-main {
+    border-left: none !important;
+    padding: 12px 12px 24px;
+  }
+
+  /* 抽屉底色：压掉 layout.css 里 74% 的深色规则 */
+  [data-theme='dark'] .gh-side,
+  [data-theme='dark'] .zh-side,
+  [data-theme='dark'][data-ui='zhihu'] .gh-side {
+    background: var(--cup-drawer-bg) !important;
+  }
+
+  /* ---------- 抽屉：关闭时必须完全移出（含 8px 内缩） ---------- */
+  .gh-side,
+  .zh-side,
+  [data-ui='zhihu'] .gh-side {
+    transform: translateX(calc(-100% - 12px));
+    transition: transform var(--cup-dur-panel) var(--cup-ease);
+  }
+  .gh-side.open,
+  .zh-side.open {
+    transform: none;
+  }
+
+  /* ---------- 抽屉：圆角卡片 ---------- */
+  .gh-side,
+  .zh-side,
+  [data-ui='zhihu'] .gh-side {
+    top: calc(var(--header-h) + 8px) !important;
+    bottom: auto !important;
+    left: 8px !important;
+    width: calc(100% - 16px) !important;
+    max-width: 320px;
+    height: calc(100vh - var(--header-h) - 16px - env(safe-area-inset-bottom, 0px)) !important;
+    height: calc(100dvh - var(--header-h) - 16px - env(safe-area-inset-bottom, 0px)) !important;
+    max-height: none !important;
+    padding: 10px 8px !important;
+    border: none !important;
+    border-radius: var(--cup-radius-md) !important;   /* 16px */
+    background: var(--cup-drawer-bg) !important;
+    -webkit-backdrop-filter: var(--cup-raised-blur);
+    backdrop-filter: var(--cup-raised-blur);
+    box-shadow: var(--cup-raised-shadow) !important;
+    z-index: 70;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* ---------- 触控行：48px + 发丝分隔 ---------- */
+  .gh-nav { gap: 0; }
+  .gh-nav-item {
+    height: 46px;
+    padding: 0 12px;
+    border-radius: 12px;
+    font-size: 15px;
+    gap: 10px;
+    position: relative;
+  }
+  .gh-nav-item svg { width: 18px; height: 18px; }
+  /* 行间发丝线（最后一行、悬停、选中不画） */
+  .gh-nav-item::after {
+    content: '';
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 0;
+    height: 1px;
+    background: var(--cup-border-subtle);
+    opacity: .55;
+  }
+  .gh-nav-item:last-child::after,
+  .gh-nav-item:hover::after,
+  .gh-nav-item.active::after { opacity: 0; }
+  .gh-nav-item.active { background: color-mix(in srgb, var(--cup-accent) 12%, transparent); }
+
+  .gh-side-title {
+    height: 34px;
+    margin: 10px 0 2px;
+    font-size: 12.5px;
+    letter-spacing: 0;
+  }
+  .gh-proj {
+    height: 42px;
+    padding-left: 20px;
+    border-radius: 12px;
+    font-size: 14px;
+  }
+  .gh-user { height: 46px; }
+
+  /* 抽屉里的滚动条不外溢 */
+  .gh-side::-webkit-scrollbar { width: 4px; }
+}
+
+/* 桌面端不注入底部空间 */
+@media (min-width: 901px) {
+  body { padding-bottom: 0; }
+}
+
+/* 打印：隐藏工具栏 */
+@media print {
+  .m-dock { display: none !important; }
+}

@@ -1,0 +1,207 @@
+/* ============================================================
+ * HJSEC · Cupertino — Auth / Version
+ * 登录、注册、忘记密码；版本徽章
+ * ============================================================ */
+
+/* ---------------- 登录页：通透冰川背景 ---------------- */
+body.auth-mode,
+[data-ui='zhihu'] body.auth-mode,
+[data-ui='github'] body.auth-mode {
+  background: var(--cup-bg-tertiary) !important;
+  background-image: none !important;
+}
+[data-theme='dark'] body.auth-mode,
+[data-theme='dark'][data-ui='zhihu'] body.auth-mode,
+[data-theme='dark'][data-ui='github'] body.auth-mode {
+  background: var(--cup-bg-secondary) !important;
+  background-image: none !important;
+}
+
+/* 登录容器 */
+.gh-auth,
+.zh-auth {
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  padding: 8vh var(--sp-5) var(--sp-7);
+}
+.gh-auth h2,
+.zh-auth h2 {
+  margin: 0 0 var(--sp-2);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -.025em;
+  color: var(--fg-primary);
+  text-align: center;
+}
+.gh-auth-sub,
+.zh-auth-sub {
+  margin: 0 0 var(--sp-6);
+  font-size: var(--fs-base);
+  color: var(--fg-secondary);
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* 终端卡片：浅色玻璃壳 + 内容区 */
+.term-window {
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+.term-titlebar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  height: 34px;
+  padding: 0 var(--sp-4);
+  background: var(--bg-hover);
+  border-bottom: 1px solid var(--line-soft);
+}
+.traffic { display: inline-flex; gap: 6px; }
+.traffic i {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 .5px rgba(34, 50, 63, .12);
+}
+.traffic i:nth-child(1) { background: #e5a3a3; }
+.traffic i:nth-child(2) { background: #e5c896; }
+.traffic i:nth-child(3) { background: #a9c9b3; }
+.term-title {
+  font: 600 11px var(--font-mono);
+  color: var(--fg-tertiary);
+  letter-spacing: .04em;
+}
+
+.term-body {
+  padding: var(--sp-5);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: 1.9;
+  color: var(--fg-primary);
+}
+.term-line {
+  color: var(--brand);
+  font-weight: 600;
+  margin-bottom: var(--sp-2);
+}
+.term-prompt-line {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--fg-tertiary);
+}
+.term-prompt { color: var(--brand); font-weight: 600; flex: 0 0 auto; }
+.term-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--fg-primary);
+  font: inherit;
+  caret-color: var(--brand);
+  outline: none;
+  padding: 0;
+}
+.term-input::placeholder { color: var(--fg-tertiary); }
+.term-field + .term-field { margin-top: var(--sp-3); }
+.term-field > label {
+  display: block;
+  margin-bottom: 2px;
+  font-size: var(--fs-xs);
+  color: var(--fg-tertiary);
+  letter-spacing: .02em;
+}
+.term-hint {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--fg-tertiary);
+  line-height: 1.6;
+}
+.term-btn {
+  width: 100%;
+  height: 34px;
+  margin-top: var(--sp-4);
+  border: 1px solid var(--brand);
+  border-radius: var(--r-sm);
+  background: var(--brand);
+  color: var(--brand-contrast);
+  font: 560 var(--fs-base) var(--font-ui);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+.term-btn:hover { background: var(--brand-hover); border-color: var(--brand-hover); }
+.term-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* 辅助链接 */
+.gh-auth-links,
+.zh-auth-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+  font-size: var(--fs-sm);
+  color: var(--fg-tertiary);
+}
+.gh-auth-links button,
+.zh-auth-links button {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--fg-link);
+  font: inherit;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease);
+}
+.gh-auth-links button:hover,
+.zh-auth-links button:hover { color: var(--brand); }
+
+/* ---------------- 版本徽章 ---------------- */
+.app-version-line {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-5);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--line-soft);
+  font-size: var(--fs-xs);
+  color: var(--fg-tertiary);
+}
+.app-version-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px var(--sp-2);
+  border-radius: var(--r-xs);
+  background: var(--brand-soft);
+  border: 1px solid transparent;
+  color: var(--brand-hover);
+  font: 700 11px var(--font-mono);
+  letter-spacing: .02em;
+}
+[data-theme='dark'] .app-version-badge { color: var(--brand-hover); }
+
+.gh-auth-foot-version {
+  margin-top: var(--sp-4);
+  text-align: center;
+  font-size: var(--fs-xs);
+  color: var(--fg-tertiary);
+}
+
+/* 注册 / 找回密码的验证码行 */
+.captcha-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.captcha-row .term-input { flex: 1 1 auto; }
+.captcha-code {
+  flex: 0 0 auto;
+  font: 700 15px var(--font-mono);
+  letter-spacing: .18em;
+  color: var(--brand);
+  user-select: none;
+  padding: 0 var(--sp-2);
+}

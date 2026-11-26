@@ -1,0 +1,296 @@
+/* ============================================================
+ * HJSEC · Cupertino — Editor
+ * 编辑器与预览共用同一套 Token，避免"阅读 Cupertino、编辑旧后台"
+ * ============================================================ */
+
+#editor-workspace {
+  --ob-purple: var(--brand);
+  --ob-purple-soft: var(--brand-soft);
+  --ob-bg: var(--bg-panel);
+  --ob-bg-elev: var(--bg-elevated);
+  --ob-border: var(--line);
+  --ob-text: var(--fg-primary);
+  --ob-text-2: var(--fg-secondary);
+  --ob-text-3: var(--fg-tertiary);
+  --ob-code-bg: var(--code-bg);
+  background: transparent !important;
+}
+
+/* ---------------- 头部 ---------------- */
+#editor-workspace .ob-head {
+  background: var(--bg-panel) !important;
+  border-bottom: 1px solid var(--line-soft) !important;
+  border-radius: var(--r-md) var(--r-md) 0 0;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+#editor-workspace .ew-meta {
+  background: transparent !important;
+  border-bottom: 1px solid var(--line-soft) !important;
+}
+#editor-workspace .ob-row-1,
+#editor-workspace .ob-row-mode,
+#editor-workspace .ob-toolbar {
+  border-color: var(--line-soft) !important;
+}
+
+/* 文件名 */
+#editor-workspace .ob-file-icon { color: var(--fg-tertiary); }
+#editor-workspace .ob-file-name {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--fg-secondary);
+}
+#editor-workspace .ob-save-state { color: var(--fg-tertiary); font-size: var(--fs-xs); }
+
+/* ---------------- 模式切换 ---------------- */
+#editor-workspace .ob-mode-switch { gap: var(--sp-1); }
+#editor-workspace .ob-mode-btn {
+  height: 27px;
+  padding: 0 var(--sp-3);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--fg-secondary);
+  font-size: var(--fs-sm);
+  transition: background var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease),
+              color var(--dur-fast) var(--ease);
+}
+[data-ui] #editor-workspace .ob-mode-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--line);
+  color: var(--fg-primary);
+}
+[data-ui] #editor-workspace .ob-mode-btn.active {
+  background: var(--brand-soft);
+  border-color: var(--brand);
+  color: var(--brand-hover);
+  font-weight: 620;
+}
+#editor-workspace .ob-badge {
+  background: var(--brand);
+  color: var(--brand-contrast);
+  border-radius: 3px;
+  font-size: 9.5px;
+  padding: 0 5px;
+  line-height: 14px;
+}
+
+/* ---------------- 视图切换 ---------------- */
+#editor-workspace .ob-view-switch {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-xs);
+  background: transparent;
+  overflow: hidden;
+}
+#editor-workspace .ob-view-switch button {
+  height: 25px;
+  padding: 0 var(--sp-3);
+  border: none;
+  background: transparent;
+  color: var(--fg-secondary);
+  font-size: var(--fs-sm);
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+#editor-workspace .ob-view-switch button + button { border-left: 1px solid var(--line-soft); }
+[data-ui] #editor-workspace .ob-view-switch button:hover { background: var(--bg-hover); color: var(--fg-primary); }
+[data-ui] #editor-workspace .ob-view-switch button.active {
+  background: var(--brand);
+  color: var(--brand-contrast);
+  font-weight: 600;
+}
+
+/* ---------------- 轻量按钮 ---------------- */
+#editor-workspace .ob-btn {
+  height: 26px;
+  padding: 0 var(--sp-3);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--fg-secondary);
+  font-size: var(--fs-sm);
+  transition: background var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease),
+              color var(--dur-fast) var(--ease);
+}
+[data-ui] #editor-workspace .ob-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--line);
+  color: var(--fg-primary);
+}
+#editor-workspace .ob-q {
+  border-color: currentColor;
+  font-size: 9.5px;
+}
+
+/* ---------------- 工具栏 ---------------- */
+#editor-workspace .ob-toolbar {
+  border-top: 1px solid var(--line-soft);
+  background: transparent;
+}
+#editor-workspace .ob-tb {
+  height: 25px;
+  min-width: 26px;
+  padding: 0 var(--sp-2);
+  border: none;
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--fg-secondary);
+  font-size: var(--fs-sm);
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+[data-ui] #editor-workspace .ob-tb:hover {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+#editor-workspace .ob-toolbar-hint { color: var(--fg-tertiary); }
+
+/* ---------------- 灰色辅助提示 ---------------- */
+#editor-workspace .ob-hint,
+#editor-workspace .ob-hint-inline {
+  color: var(--fg-tertiary);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+}
+#editor-workspace .ob-empty-hint { color: var(--fg-tertiary); font-size: var(--fs-base); }
+#editor-workspace .ob-empty-sub { color: var(--fg-tertiary); opacity: .85; font-size: var(--fs-xs); }
+#editor-workspace .ob-preview-hint {
+  background: var(--bg-hover);
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--fg-tertiary);
+  font-size: var(--fs-xs);
+}
+
+/* ---------------- 编辑主体 ---------------- */
+#editor-workspace .ew-body {
+  background: var(--bg-panel) !important;
+  border-top: none;
+  border-radius: 0 0 var(--r-md) var(--r-md);
+}
+#editor-workspace .ew-editor-pane,
+#editor-workspace .ew-preview-pane { background: transparent !important; }
+
+#editor-workspace .ew-editor-pane #f-content {
+  font-family: var(--font-mono) !important;
+  font-size: 13.5px;
+  line-height: 1.72;
+  color: var(--fg-primary);
+  background: transparent !important;
+  caret-color: var(--brand);
+  padding: var(--sp-5) var(--sp-6);
+}
+#editor-workspace .ew-editor-pane #f-content::selection { background: var(--brand-soft); }
+
+#editor-workspace .ew-editor-pane .md-rich {
+  font-family: var(--font-text) !important;
+  font-size: var(--fs-lg);
+  line-height: var(--line-height);
+  color: var(--fg-primary);
+  background: transparent !important;
+  padding: var(--sp-5) var(--sp-6);
+}
+#editor-workspace .ew-editor-pane .md-rich:empty::before,
+#editor-workspace .ew-editor-pane .md-rich[data-placeholder]:empty::before {
+  color: var(--fg-tertiary);
+}
+
+/* 分屏：预览区与正文共用排版 */
+#editor-workspace .md-preview-body {
+  background: transparent !important;
+  padding: var(--sp-5) var(--sp-6);
+}
+#editor-workspace .ew-preview-pane {
+  border-left: 1px solid var(--line-soft) !important;
+}
+
+/* 拖拽条 */
+#editor-workspace .ew-resize::before { background: var(--line); }
+#editor-workspace .ew-resize:hover::before { background: var(--brand); }
+#editor-workspace .ew-resize-tip { color: var(--fg-tertiary); }
+
+/* ---------------- kbd / 语法帮助 ---------------- */
+#editor-workspace kbd {
+  font: 600 10.5px var(--font-mono);
+  padding: 0 4px;
+  border: 1px solid var(--line-soft);
+  border-bottom-width: 2px;
+  border-radius: var(--r-xs);
+  background: var(--bg-panel);
+  color: var(--fg-secondary);
+}
+
+/* 使用说明弹窗 */
+.ob-help-modal { background: rgba(0, 0, 0, .28); }
+.ob-help-panel {
+  background: var(--bg-elevated);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+.ob-help-head {
+  border-bottom: 1px solid var(--line-soft);
+  padding: var(--sp-4) var(--sp-5);
+}
+.ob-help-head b { font-size: var(--fs-lg); color: var(--fg-primary); }
+.ob-help-sub { font-size: var(--fs-sm); color: var(--fg-tertiary); }
+.ob-help-close { border-radius: var(--r-xs); color: var(--fg-tertiary); }
+.ob-help-close:hover { background: var(--bg-hover); color: var(--fg-primary); }
+.ob-help-sec h4 {
+  font-size: var(--fs-sm);
+  font-weight: 640;
+  color: var(--fg-secondary);
+  margin: 0 0 var(--sp-2);
+}
+.ob-help-item { border-bottom: 1px solid var(--line-soft); padding: var(--sp-2) 0; }
+.ob-help-code {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  background: var(--code-bg);
+  border: 1px solid var(--code-line);
+  border-radius: var(--r-xs);
+  color: var(--code-fg);
+  padding: 2px var(--sp-2);
+}
+.ob-help-acts button {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--fg-tertiary);
+  font-size: 11px;
+  height: 22px;
+  padding: 0 var(--sp-2);
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+.ob-help-acts button:hover {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+  border-color: var(--line);
+}
+
+/* 更多菜单 */
+.ew-quick-menu {
+  background: var(--bg-elevated);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-md);
+  padding: var(--sp-1);
+}
+.ew-quick-menu button {
+  border-radius: var(--r-xs);
+  font-size: var(--fs-sm);
+  color: var(--fg-secondary);
+  padding: var(--sp-2) var(--sp-3);
+}
+.ew-quick-menu button:hover { background: var(--bg-hover); color: var(--fg-primary); }
+
+/* 图片提示（上下双份） */
+.md-img-hint {
+  background: var(--warning-soft);
+  border: 1px solid rgba(185, 141, 85, .28);
+  border-radius: var(--r-xs);
+  color: var(--warning);
+  font-size: var(--fs-xs);
+}
+.md-img-hint-mark { background: rgba(185, 141, 85, .16); border-radius: 3px; }

@@ -1,0 +1,334 @@
+/* ============================================================
+ * HJSEC Markdown 渲染 · Quartz + GitHub + VitePress 融合
+ * 仅作用于 .prose（周报正文 / 预览），不影响系统其他 UI
+ * 加载顺序：style.css → zhihu.css → markdown.css（本文件最后，覆盖）
+ * ============================================================ */
+
+/* ---------- 正文基础 ---------- */
+.prose {
+  font-size: 16px;
+  line-height: 1.75;
+  color: #374151;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  text-rendering: optimizeLegibility;
+}
+.prose > *:first-child { margin-top: 0; }
+.prose > *:last-child { margin-bottom: 0; }
+
+/* ---------- 标题：优雅蓝 ---------- */
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  color: #1e40af;
+  font-weight: 700;
+  line-height: 1.35;
+  scroll-margin-top: 24px;
+  margin: 1.8em 0 .7em;
+  letter-spacing: -.01em;
+  position: relative;
+}
+.prose h1 { font-size: 32px; padding-bottom: .4em; border-bottom: 2px solid #dbeafe; }
+.prose h2 { font-size: 25px; padding-bottom: .3em; border-bottom: 1px solid #e5e7eb; }
+.prose h2::after {
+  content: ''; position: absolute; left: 0; bottom: -1px; width: 64px; height: 2px;
+  background: linear-gradient(90deg, #3b82f6, transparent);
+}
+.prose h3 { font-size: 20px; color: #1e3a8a; }
+.prose h4 { font-size: 18px; color: #1e3a8a; }
+.prose h5 { font-size: 16px; color: #334155; }
+.prose h6 { font-size: 15px; color: #475569; }
+/* 锚点：悬停显示，点击复制链接 */
+.prose .h-anchor {
+  opacity: 0; margin-left: .4em; font-size: .7em; color: #93c5fd;
+  text-decoration: none; transition: opacity .15s; cursor: pointer;
+}
+.prose h1:hover .h-anchor, .prose h2:hover .h-anchor,
+.prose h3:hover .h-anchor, .prose h4:hover .h-anchor,
+.prose h5:hover .h-anchor, .prose h6:hover .h-anchor { opacity: 1; }
+
+/* ---------- 段落 / 列表 ---------- */
+.prose p { margin: 1em 0; }
+.prose ul, .prose ol { margin: 1em 0; padding-left: 1.6em; }
+.prose li { margin: .35em 0; }
+.prose li > ul, .prose li > ol { margin: .3em 0 .3em 1em; }
+.prose ul > li::marker { color: #60a5fa; }
+.prose ol > li::marker { color: #3b82f6; font-weight: 600; }
+
+/* ---------- 行内元素 ---------- */
+.prose strong { font-weight: 700; color: #111827; }
+.prose em { color: #4b5563; }
+.prose a { color: #2563eb; text-decoration: none; border-bottom: 1px solid transparent; }
+.prose a:hover { border-bottom-color: #2563eb; }
+.prose del { color: #9ca3af; }
+.prose mark { background: #fef3c7; color: #92400e; padding: 1px 3px; border-radius: 3px; }
+.prose sub, .prose sup { font-size: .72em; }
+.prose code:not(pre code) {
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .875em;
+  background: #eff6ff;
+  color: #4338ca;
+  border: 1px solid #dbeafe;
+  border-radius: 5px;
+  padding: .12em .4em;
+  white-space: nowrap;
+}
+
+/* ---------- 引用块 ---------- */
+.prose blockquote {
+  margin: 1.2em 0;
+  padding: .8em 1.1em;
+  border-left: 4px solid #3b82f6;
+  background: #f0f7ff;
+  border-radius: 0 8px 8px 0;
+  color: #334155;
+}
+.prose blockquote p { margin: .4em 0; }
+.prose blockquote blockquote { margin: .6em 0 .6em 1em; background: #e6f0fd; }
+
+/* ---------- 分割线 ---------- */
+.prose hr { border: 0; height: 1px; margin: 2em 0; background: linear-gradient(90deg, transparent, #cbd5e1, transparent); }
+
+/* ---------- 代码块（技术文档风格） ---------- */
+.prose .code-block {
+  margin: 1.25em 0;
+  border: 1px solid #d7e4ef;
+  border-radius: 10px;
+  background: #f0f5fa;
+  overflow: hidden;
+}
+.prose .code-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px;
+  background: #e7eff7;
+  border-bottom: 1px solid #d7e4ef;
+  min-height: 36px;
+}
+.prose .term-dots { display: inline-flex; gap: 5px; }
+.prose .term-dots i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.prose .term-dots i:nth-child(1) { background: #fb7185; }
+.prose .term-dots i:nth-child(2) { background: #fbbf24; }
+.prose .term-dots i:nth-child(3) { background: #34d399; }
+.prose .code-lang {
+  font: 600 11.5px 'JetBrains Mono', ui-monospace, monospace;
+  color: #64748b; text-transform: uppercase; letter-spacing: .6px;
+}
+.prose .code-copy, .prose .code-fold {
+  margin-left: auto; border: 1px solid #d7e4ef; background: #f8fafc;
+  color: #64748b; font-size: 11.5px; padding: 3px 10px; border-radius: 5px; cursor: pointer;
+}
+.prose .code-fold { margin-left: 0; }
+.prose .code-copy:hover, .prose .code-fold:hover { background: #fff; color: #2563eb; }
+.prose .code-block pre.code {
+  margin: 0; padding: 12px 0; border: none; border-radius: 0;
+  background: transparent; overflow-x: auto;
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13.5px; line-height: 1.65;
+  -webkit-overflow-scrolling: touch;
+}
+.prose .code-block pre code { background: none; border: none; padding: 0; font-size: inherit; color: inherit; }
+.prose .code-line { display: block; white-space: pre; padding-right: 16px; }
+.prose .code-ln {
+  display: inline-block; width: 3em; padding-right: 1em; margin-right: 1em;
+  text-align: right; color: #9aaebd; user-select: none;
+  border-right: 1px solid #dbe4ed;
+}
+.prose .code-txt { white-space: pre; color: #334155; }
+/* 语法高亮 token（GitHub Light / One Light） */
+.prose .tok-kw { color: #a626a4; font-weight: 600; }
+.prose .tok-str { color: #50a14f; }
+.prose .tok-com { color: #a0aab5; font-style: italic; }
+.prose .tok-num { color: #986801; }
+.prose .tok-fn { color: #4078f2; }
+.prose .tok-key { color: #c18401; }
+/* 代码折叠 */
+.prose .code-fold-body[hidden] { display: none; }
+
+/* ---------- 表格 ---------- */
+.prose .table-wrap { overflow-x: auto; margin: 1.25em 0; border: 1px solid #dbe4ed; border-radius: 8px; }
+.prose .md-table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 0; }
+.prose .md-table th, .prose .md-table td { border: none; border-bottom: 1px solid #e5edf5; padding: 10px 14px; text-align: left; word-break: break-word; }
+.prose .md-table th { background: #eef5fc; color: #1e40af; font-weight: 650; white-space: nowrap; }
+.prose .md-table tbody tr:hover td { background: #f8fbff; }
+.prose .md-table tbody tr:last-child td { border-bottom: none; }
+
+/* ---------- 图片（自适应 + 点击放大） ---------- */
+.prose img { border-radius: 8px; max-width: 100%; height: auto; display: block; margin: 1.2em auto; cursor: zoom-in; border: 1px solid #e5e7eb; }
+.prose img.md-zoomed {
+  position: fixed; z-index: 9999; inset: 0; margin: auto;
+  max-width: 94vw; max-height: 94vh; width: auto; height: auto;
+  cursor: zoom-out; border: none; box-shadow: 0 20px 60px rgba(0,0,0,.4);
+  object-fit: contain;
+}
+
+/* ---------- 任务清单 ---------- */
+.prose .task-list { list-style: none; padding-left: .2em; }
+.prose .task-item { display: flex; align-items: baseline; gap: .5em; }
+.prose .task-box {
+  flex: 0 0 auto; width: 15px; height: 15px; border: 1.5px solid #94a3b8; border-radius: 4px;
+  display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: #fff;
+}
+.prose .task-box.done { background: #3b82f6; border-color: #3b82f6; }
+.prose .task-done { color: #94a3b8; text-decoration: line-through; }
+
+/* ---------- Callout / 折叠 / 时间线 / 进度条 / 徽章 ---------- */
+.prose .callout {
+  border: 1px solid #dbeafe; border-left: 4px solid #3b82f6; border-radius: 8px;
+  background: #f0f7ff; padding: .8em 1.1em; margin: 1.2em 0;
+}
+.prose .callout summary { cursor: pointer; font-weight: 650; color: #1e40af; list-style: none; }
+.prose .callout summary::-webkit-details-marker { display: none; }
+.prose .callout summary::before { content: '▸ '; color: #3b82f6; }
+.prose .callout[open] summary::before { content: '▾ '; }
+.prose .callout-title { font-weight: 650; color: #1e40af; margin-bottom: .3em; }
+.prose .callout-body p { margin: .4em 0; }
+.prose .callout-warning, .prose .callout-caution { border-color: #fde68a; border-left-color: #f59e0b; background: #fffbeb; }
+.prose .callout-danger, .prose .callout-error { border-color: #fecaca; border-left-color: #ef4444; background: #fef2f2; }
+.prose .callout-success, .prose .callout-tip { border-color: #bbf7d0; border-left-color: #22c55e; background: #f0fdf4; }
+.prose .md-details { border: 1px solid #dbe4ed; border-radius: 8px; margin: 1.2em 0; background: #f8fafc; overflow: hidden; }
+.prose .md-details summary { cursor: pointer; padding: .7em 1em; font-weight: 600; color: #334155; }
+.prose .md-details-body { padding: 0 1em 1em; }
+.prose .md-timeline { list-style: none; border-left: 2px solid #bfdbfe; padding-left: 1.2em; margin: 1.2em 0; }
+.prose .md-timeline li { position: relative; padding: .3em 0 .8em; }
+.prose .md-timeline li::before { content: ''; position: absolute; left: -1.6em; top: .7em; width: 9px; height: 9px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 0 3px #dbeafe; }
+.prose .tl-time { color: #2563eb; font: 600 12px 'JetBrains Mono', monospace; margin-right: .6em; }
+.prose .md-progress { display: inline-flex; align-items: center; gap: 8px; min-width: 140px; height: 20px; background: #eff6ff; border: 1px solid #dbeafe; border-radius: 999px; overflow: hidden; padding-right: 10px; }
+.prose .md-progress-bar { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, #3b82f6, #8b5cf6); border-radius: 999px; }
+.prose .md-progress-label { position: relative; font-size: 11.5px; font-weight: 600; color: #1e40af; padding-left: 10px; }
+.prose .md-badge { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 11.5px; font-weight: 650; }
+.prose .badge-blue { background: #ddf4ff; color: #0969da; }
+.prose .badge-green { background: #dafbe1; color: #1a7f37; }
+.prose .badge-orange { background: #fff1e5; color: #bc4c00; }
+.prose .badge-red { background: #ffebe9; color: #cf222e; }
+.prose .badge-purple { background: #fbefff; color: #8250df; }
+.prose .badge-gray { background: #f1f5f9; color: #475569; }
+.prose .md-kbd { font: 600 11.5px ui-monospace, monospace; padding: 1px 6px; border: 1px solid #d7e4ef; border-bottom-width: 2px; border-radius: 5px; background: #f8fafc; color: #334155; }
+.prose .wiki-link { color: #2563eb; background: #eff6ff; border-radius: 4px; padding: 1px 5px; }
+.prose .md-tag { color: #2563eb; background: #eff6ff; border-radius: 999px; padding: 1px 8px; font-size: 11.5px; }
+.prose .md-img-missing { background: #fef3c7; color: #92400e; border-radius: 4px; padding: 1px 6px; font-size: 11.5px; }
+.prose .mention { color: #2563eb; background: #eff6ff; border-radius: 4px; padding: 0 4px; }
+
+/* ---------- Mermaid / KaTeX 容器 ---------- */
+.prose .md-mermaid { border: 1px solid #dbeafe; border-radius: 8px; background: #f8fbff; margin: 1.2em 0; overflow: hidden; }
+.prose .mm-title { padding: 7px 12px; background: #eef5fc; color: #1e40af; font-size: 11.5px; font-weight: 650; letter-spacing: .5px; }
+.prose .mm-body { padding: 14px; }
+.prose .mm-step { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: .4em 0; }
+.prose .mm-node { display: inline-block; padding: 5px 12px; border: 1px solid #bfdbfe; border-radius: 6px; background: #fff; color: #1e3a8a; font-size: 13px; }
+.prose .mm-arrow { color: #60a5fa; font-weight: 700; }
+.prose .md-mermaid pre { margin: 0; padding: 12px; font-size: 12.5px; overflow-x: auto; }
+.prose .md-math { text-align: center; padding: .8em; margin: 1em 0; background: #f8fafc; border-radius: 8px; color: #1e3a8a; font-family: Georgia, 'Times New Roman', serif; font-size: 17px; overflow-x: auto; }
+.prose .md-math-inline { font-family: Georgia, serif; color: #1e3a8a; background: #f8fafc; padding: 0 3px; border-radius: 3px; }
+
+/* ---------- 深色模式（仅 Markdown 内容） ---------- */
+[data-theme='dark'] .prose { color: #cbd5e1; }
+[data-theme='dark'] .prose h1, [data-theme='dark'] .prose h2 { color: #93c5fd; border-color: #1e3a5f; }
+[data-theme='dark'] .prose h2::after { background: linear-gradient(90deg, #3b82f6, transparent); }
+[data-theme='dark'] .prose h3, [data-theme='dark'] .prose h4 { color: #bfdbfe; }
+[data-theme='dark'] .prose h5, [data-theme='dark'] .prose h6 { color: #cbd5e1; }
+[data-theme='dark'] .prose strong { color: #f1f5f9; }
+[data-theme='dark'] .prose a { color: #60a5fa; }
+[data-theme='dark'] .prose code:not(pre code) { background: #16243a; color: #c4b5fd; border-color: #1e3a5f; }
+[data-theme='dark'] .prose blockquote { background: #111f33; border-left-color: #3b82f6; color: #cbd5e1; }
+[data-theme='dark'] .prose blockquote blockquote { background: #16243a; }
+[data-theme='dark'] .prose .code-block { background: #0d1520; border-color: #1e293b; }
+[data-theme='dark'] .prose .code-bar { background: #131d2b; border-color: #1e293b; }
+[data-theme='dark'] .prose .code-lang { color: #94a3b8; }
+[data-theme='dark'] .prose .code-copy, [data-theme='dark'] .prose .code-fold { background: #131d2b; border-color: #1e293b; color: #94a3b8; }
+[data-theme='dark'] .prose .code-ln { color: #475569; border-color: #1e293b; }
+[data-theme='dark'] .prose .code-txt { color: #cbd5e1; }
+[data-theme='dark'] .prose .tok-kw { color: #c792ea; }
+[data-theme='dark'] .prose .tok-str { color: #a5d6a7; }
+[data-theme='dark'] .prose .tok-com { color: #5c6b7a; }
+[data-theme='dark'] .prose .tok-num { color: #f0b672; }
+[data-theme='dark'] .prose .tok-fn { color: #82aaff; }
+[data-theme='dark'] .prose .tok-key { color: #ffcb6b; }
+[data-theme='dark'] .prose .md-table th { background: #131d2b; color: #93c5fd; }
+[data-theme='dark'] .prose .md-table th, [data-theme='dark'] .prose .md-table td { border-color: #1e293b; }
+[data-theme='dark'] .prose .md-table tbody tr:hover td { background: #111f33; }
+[data-theme='dark'] .prose .table-wrap { border-color: #1e293b; }
+[data-theme='dark'] .prose .callout { background: #111f33; border-color: #1e3a5f; }
+[data-theme='dark'] .prose .md-details { background: #0f1a28; border-color: #1e293b; }
+[data-theme='dark'] .prose .md-mermaid { background: #0f1a28; border-color: #1e3a5f; }
+[data-theme='dark'] .prose .mm-title { background: #131d2b; }
+[data-theme='dark'] .prose .mm-node { background: #16243a; border-color: #1e3a5f; color: #bfdbfe; }
+[data-theme='dark'] .prose .md-math { background: #0f1a28; color: #bfdbfe; }
+
+/* ---------- 移动端 ---------- */
+@media (max-width: 720px) {
+  .prose { font-size: 16px; line-height: 1.75; }
+  .prose h1 { font-size: 26px; }
+  .prose h2 { font-size: 22px; }
+  .prose h3 { font-size: 19px; }
+  .prose .code-block pre.code { font-size: 12.5px; }
+  .prose .md-table { font-size: 13px; }
+  .prose .md-table th, .prose .md-table td { padding: 8px 10px; white-space: nowrap; }
+}
+
+/* ---------- 编辑器：显著预览按钮 + 语法提示 ---------- */
+.md-toolbar .md-preview-btn { margin-left: auto; font-weight: 650; }
+.md-syntax-help {
+  margin-top: 8px; padding: 10px 12px; border: 1px dashed #bfdbfe;
+  border-radius: 8px; background: #f8fbff; font-size: 12px; color: #475569;
+  line-height: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+}
+.md-syntax-help b { color: #1e40af; font-size: 12.5px; }
+.md-syntax-help code {
+  font: 500 11.5px 'JetBrains Mono', ui-monospace, monospace;
+  background: #eff6ff; color: #4338ca; border: 1px solid #dbeafe;
+  padding: 1px 6px; border-radius: 4px; white-space: nowrap;
+}
+.md-syntax-help > span { flex: 1 1 100%; color: #64748b; }
+[data-theme='dark'] .md-syntax-help { background: #0f1a28; border-color: #1e3a5f; color: #94a3b8; }
+[data-theme='dark'] .md-syntax-help b { color: #93c5fd; }
+[data-theme='dark'] .md-syntax-help code { background: #16243a; color: #c4b5fd; border-color: #1e3a5f; }
+
+/* ==================== 周报阅读背景美化 ==================== */
+/* 正文卡片：柔和渐变网 + 细腻纹理，不喧宾夺主 */
+.article-card {
+  position: relative;
+  background-color: #fdfdfb;
+  background-image:
+    radial-gradient(circle at 0% 0%, rgba(124, 58, 237, .045) 0%, transparent 42%),
+    radial-gradient(circle at 100% 0%, rgba(59, 130, 246, .05) 0%, transparent 38%),
+    radial-gradient(circle at 50% 100%, rgba(16, 185, 129, .035) 0%, transparent 46%),
+    linear-gradient(180deg, #ffffff 0%, #fdfcfa 100%);
+  border: 1px solid #ece9e3;
+  box-shadow: 0 1px 2px rgba(24, 22, 20, .04), 0 12px 32px -12px rgba(24, 22, 20, .08);
+  overflow: hidden;
+}
+/* 顶部细渐变光带 */
+.article-card::before {
+  content: ''; position: absolute; left: 0; right: 0; top: 0; height: 3px;
+  background: linear-gradient(90deg, #7c3aed, #3b82f6 45%, #10b981 100%);
+  opacity: .85;
+}
+[data-theme='dark'] .article-card {
+  background-color: #1b1b1e;
+  background-image:
+    radial-gradient(circle at 0% 0%, rgba(167, 139, 250, .07) 0%, transparent 42%),
+    radial-gradient(circle at 100% 0%, rgba(59, 130, 246, .06) 0%, transparent 38%),
+    radial-gradient(circle at 50% 100%, rgba(16, 185, 129, .04) 0%, transparent 46%),
+    linear-gradient(180deg, #1d1d20 0%, #191919 100%);
+  border-color: #2e2e33;
+  box-shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -12px rgba(0,0,0,.6);
+}
+
+/* 详情页整体：淡雅背景，衬托卡片 */
+.article-layout { position: relative; }
+.article-layout::before {
+  content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(124, 58, 237, .05), transparent 70%),
+    radial-gradient(ellipse 800px 460px at 100% 8%, rgba(59, 130, 246, .05), transparent 72%);
+}
+[data-theme='dark'] .article-layout::before {
+  background:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(167, 139, 250, .06), transparent 70%),
+    radial-gradient(ellipse 800px 460px at 100% 8%, rgba(59, 130, 246, .05), transparent 72%);
+}
+
+/* 标题区：底部渐隐分隔 */
+.article-card .detail-head { padding-bottom: 16px; }
+.article-card .detail-head h1 { letter-spacing: -.015em; }
+
+/* 正文首段略大，增强阅读入口感 */
+.article-prose > p:first-of-type { font-size: 16.5px; color: #333; }
+[data-theme='dark'] .article-prose > p:first-of-type { color: #d4d4d4; }

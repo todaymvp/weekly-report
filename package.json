@@ -1,0 +1,41 @@
+{
+  "name": "weekly-report-system",
+  "version": "2.1.0",
+  "private": false,
+  "description": "自托管的团队学习周报系统：Markdown 周报 + 讨论 + 排行榜 + 通知，零前端框架",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "check": "node --check server.js",
+    "smoke": "DATA_DIR=/tmp/wrs-smoke ADMIN_PASSWORD=ci-test-pass MAIL_MODE=console DEV_CODE_HINT=true node server.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^13.0.3",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.3.0",
+    "multer": "^2.5.0",
+    "nodemailer": "^10.3.1"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/todaymvp/weekly-report.git"
+  },
+  "homepage": "https://github.com/todaymvp/weekly-report#readme",
+  "bugs": {
+    "url": "https://github.com/todaymvp/weekly-report/issues"
+  },
+  "keywords": [
+    "weekly-report",
+    "markdown",
+    "self-hosted",
+    "express",
+    "sqlite",
+    "security-team"
+  ]
+}

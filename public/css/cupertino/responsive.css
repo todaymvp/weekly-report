@@ -1,0 +1,146 @@
+/* ============================================================
+ * HJSEC · Cupertino — Responsive
+ * 1920 / 1440 / 1366 / 1024 / 768 / 390
+ * ============================================================ */
+
+/* ---------------- 超宽屏：限制阅读宽度，留白呼吸 ---------------- */
+@media (min-width: 1680px) {
+  .gh-shell { max-width: 1560px; gap: var(--sp-8); }
+  .gh-home { grid-template-columns: minmax(0, 1fr) 320px; }
+  .article-card { padding: var(--sp-8) 56px !important; }
+}
+
+/* ---------------- 1366 笔记本 ---------------- */
+@media (max-width: 1400px) {
+  .gh-shell { grid-template-columns: 190px minmax(0, 1fr); gap: var(--sp-6); }
+  .article-card { padding: var(--sp-6) var(--sp-7) !important; }
+  .article-toc { width: 188px; flex: 0 0 188px; }
+}
+
+/* ---------------- 1200：目录收窄 ---------------- */
+@media (max-width: 1200px) {
+  .gh-home { grid-template-columns: minmax(0, 1fr) 260px; }
+  .article-toc { width: 172px; flex: 0 0 172px; }
+  .toc-link { font-size: 12px; padding-left: var(--sp-3); }
+}
+
+/* ---------------- 1024 平板横屏：目录变浮动 ---------------- */
+@media (max-width: 1080px) {
+  .gh-shell { grid-template-columns: 176px minmax(0, 1fr); gap: var(--sp-5); }
+  .gh-home { grid-template-columns: minmax(0, 1fr); }
+  .article-layout { flex-direction: column; }
+  .article-toc {
+    width: 100%; flex: 1 1 auto;
+    position: static;
+    max-height: none;
+    border-left: none !important;
+    border-top: 1px solid var(--line-soft) !important;
+    padding: var(--sp-3) 0 0;
+    margin-top: var(--sp-4);
+    order: 2;
+  }
+  .toc-link { padding-left: var(--sp-3); }
+  .zh-layout { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------------- 900：左栏折叠为抽屉 ---------------- */
+@media (max-width: 900px) {
+  .gh-shell {
+    grid-template-columns: minmax(0, 1fr);
+    padding: var(--sp-4) var(--sp-4) var(--sp-7);
+    gap: 0;
+  }
+  .gh-side {
+    position: fixed;
+    left: 0; top: var(--header-h); bottom: 0;
+    width: 244px;
+    padding: var(--sp-4);
+    background: var(--bg-panel) !important;
+    border-right: 1px solid var(--line-soft) !important;
+    box-shadow: var(--shadow-md);
+    transform: translateX(-100%);
+    transition: transform var(--dur-panel) var(--ease);
+    z-index: 45;
+    overflow-y: auto;
+  }
+  .gh-side.open { transform: none; }
+  .gh-burger { display: inline-grid; }
+  .gh-header { padding: 0 var(--sp-4); }
+  .gh-search { width: auto; flex: 0 1 auto; }
+  .gh-search-text { display: none; }
+  .gh-search .kbd { display: none; }
+  .gh-header .ui-switch { display: none; }
+}
+
+/* ---------------- 768 平板竖屏 ---------------- */
+@media (max-width: 768px) {
+  :root { --header-h: 46px; }
+  .gh-crumb { display: none; }
+  .article-card, [data-ui] .article-card { padding: var(--sp-5) var(--sp-5) !important; border-radius: var(--r-md) !important; }
+  [data-ui] .prose, .prose { font-size: 15.5px; max-width: none; }
+  [data-ui] .prose h1, .prose h1 { font-size: 26px; }
+  [data-ui] .prose h2, .prose h2 { font-size: 21px; }
+  [data-ui] .prose h3, .prose h3 { font-size: 18px; }
+  .zh-container { padding: var(--sp-4); }
+  .zh-feed-item { padding: var(--sp-4); }
+  .repo-head, .page-head { flex-wrap: wrap; gap: var(--sp-2); }
+  .repo-title b, .page-head h2 { font-size: 18px; }
+  #editor-workspace .ob-row-1 { height: auto; padding: var(--sp-2) var(--sp-3); flex-wrap: wrap; }
+  #editor-workspace .ob-actions { margin-left: 0; width: 100%; }
+  #editor-workspace .ob-row-mode { flex-wrap: wrap; height: auto; padding: var(--sp-2) var(--sp-3); }
+  #editor-workspace .ob-hint-inline { display: none; }
+  #editor-workspace .ob-toolbar-hint { display: none; }
+  #editor-workspace .ew-editor-pane #f-content,
+  #editor-workspace .mw-editor-pane .md-rich { padding: var(--sp-3) var(--sp-4); }
+}
+
+/* ---------------- 390 手机 ---------------- */
+@media (max-width: 480px) {
+  body { font-size: 13px; }
+  .gh-header { padding: 0 var(--sp-3); gap: var(--sp-2); }
+  .gh-logo b { display: none; }
+  .gh-shell { padding: var(--sp-3) var(--sp-3) var(--sp-7); }
+  .article-card, [data-ui] .article-card {
+    padding: var(--sp-4) var(--sp-4) !important;
+    border-radius: var(--r-sm) !important;
+    border-inline: none !important;
+  }
+  [data-ui] .prose, .prose { font-size: 15px; line-height: 1.7; }
+  [data-ui] .prose h1, .prose h1 { font-size: 23px; }
+  [data-ui] .prose h2, .prose h2 { font-size: 19px; }
+  [data-ui] .prose h3, .prose h3 { font-size: 17px; }
+
+  /* 代码块横向滚动，不撑破 */
+  .prose .code-block { border-radius: var(--r-sm) !important; }
+  .prose .code-block pre.code { font-size: 11.5px; }
+  .prose .code-bar { padding: 0 var(--sp-2); gap: var(--sp-2); }
+
+  /* 表格横向滚动 */
+  .prose .table-wrap { border-radius: var(--r-sm); }
+
+  /* 触控区域 */
+  .btn, .input, .select { min-height: 34px; }
+  .btn.sm { min-height: 30px; }
+  .gh-icon-btn { width: 32px; height: 32px; }
+  .pager-btn { min-width: 32px; height: 32px; }
+  .toc-link { padding-block: 7px; }
+
+  .modal { padding: var(--sp-5); border-radius: var(--r-md); max-height: calc(100vh - 24px); overflow: auto; }
+  .notice-modal { max-width: calc(100vw - 16px); max-height: 86vh; }
+  .notice-modal h3 { padding: var(--sp-4) var(--sp-4) var(--sp-3); font-size: 16px; }
+  .notice-modal .notice-body { padding: var(--sp-4); }
+  .notice-modal .notice-act { padding: var(--sp-3) var(--sp-4); }
+
+  #editor-workspace .ob-toolbar { padding: 0 var(--sp-2); }
+  #editor-workspace .ob-tb { min-width: 24px; }
+  .ew-resize { height: 18px; }
+  .pager-info { display: none; }
+}
+
+/* ---------------- 打印 ---------------- */
+@media print {
+  .gh-header, .gh-side, .article-toc, .read-progress, .gh-actions { display: none !important; }
+  .article-card { box-shadow: none !important; border: none !important; padding: 0 !important; }
+  .prose { max-width: none; font-size: 11pt; }
+  .prose .code-block { break-inside: avoid; }
+}

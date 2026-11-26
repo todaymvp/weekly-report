@@ -1,0 +1,11 @@
+.git
+.gitea
+node_modules
+data/
+data-dev/
+.env
+.env.*
+*.log
+README.md
+DEPLOY.md
+docker-compose*.yml

@@ -1,0 +1,166 @@
+/* ============================================================
+ * HJSEC · Cupertino — Code Block
+ * 参考 GitHub / VS Code / Cupertino 的克制技术文档窗口
+ * ============================================================ */
+
+/* ---------------- 行内代码 ---------------- */
+[data-ui] .prose code:not(pre code),
+.prose code:not(pre code) {
+  font-family: var(--font-mono) !important;
+  font-size: .875em;
+  padding: 1.5px 5px;
+  border-radius: var(--r-xs);
+  background: var(--code-bg);
+  border: 1px solid var(--code-line);
+  color: var(--code-fg);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* ---------------- 代码窗口容器 ---------------- */
+[data-ui] .prose .code-block,
+.prose .code-block {
+  position: relative;
+  margin: var(--p-spacing) 0;
+  border: 1px solid var(--code-line) !important;
+  border-radius: var(--r-md) !important;
+  background: var(--code-bg) !important;
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+
+/* 顶部栏：语言 + 操作 */
+[data-ui] .prose .code-bar,
+.prose .code-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  height: 34px;
+  padding: 0 var(--sp-4);
+  background: var(--code-head) !important;
+  border-bottom: 1px solid var(--code-line) !important;
+}
+
+/* macOS 三点（低饱和） */
+.prose .term-dots { display: inline-flex; gap: 6px; flex: 0 0 auto; }
+.prose .term-dots i {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.5px rgba(34, 50, 63, .12);
+}
+.prose .term-dots i:nth-child(1) { background: #e5a3a3; }
+.prose .term-dots i:nth-child(2) { background: #e5c896; }
+.prose .term-dots i:nth-child(3) { background: #a9c9b3; }
+
+/* 语言标签 */
+[data-ui] .prose .code-lang,
+.prose .code-lang {
+  font-family: var(--font-mono) !important;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--fg-tertiary);
+}
+
+/* 复制 / 折叠按钮：轻量，hover 显示 */
+[data-ui] .prose .code-copy,
+[data-ui] .prose .code-fold,
+.prose .code-copy,
+.prose .code-fold {
+  margin-left: auto;
+  height: 21px;
+  padding: 0 var(--sp-3);
+  border: 1px solid var(--code-line);
+  border-radius: var(--r-xs);
+  background: var(--bg-panel);
+  color: var(--fg-tertiary);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: .72;
+  transition: opacity var(--dur-fast) var(--ease),
+              color var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease),
+              background var(--dur-fast) var(--ease);
+}
+.prose .code-fold { margin-left: 0; }
+.prose .code-block:hover .code-copy,
+.prose .code-block:hover .code-fold { opacity: 1; }
+[data-ui] .prose .code-copy:hover,
+[data-ui] .prose .code-fold:hover,
+.prose .code-copy:hover,
+.prose .code-fold:hover {
+  border-color: var(--brand);
+  color: var(--brand-hover);
+  background: var(--bg-panel);
+}
+
+/* ---------------- 代码区 ---------------- */
+[data-ui] .prose .code-block pre.code,
+.prose .code-block pre.code {
+  margin: 0;
+  padding: 12px 0;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  font-family: var(--font-mono) !important;
+  font-size: 13px;
+  line-height: 1.66;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  tab-size: 2;
+}
+.prose .code-block pre code {
+  background: none !important;
+  border: none !important;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* 行 */
+.prose .code-line { display: block; white-space: pre; padding-right: var(--sp-4); }
+.prose .code-txt { white-space: pre; color: var(--code-fg) !important; }
+
+/* 行号：清晰但不抢眼 */
+.prose .code-ln {
+  display: inline-block;
+  width: 2.8em;
+  padding-right: .9em;
+  margin-right: .9em;
+  text-align: right;
+  color: var(--code-ln) !important;
+  border-right: 1px solid var(--code-line);
+  user-select: none;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 折叠 */
+.prose .code-fold-body[hidden] { display: none; }
+
+/* ---------------- 语法高亮（GitHub / Cupertino） ---------------- */
+[data-ui] .prose .tok-kw, .prose .tok-kw { color: var(--code-kw) !important; font-weight: 600; }
+[data-ui] .prose .tok-str, .prose .tok-str { color: var(--code-str) !important; }
+[data-ui] .prose .tok-com, .prose .tok-com { color: var(--code-com) !important; font-style: italic; }
+[data-ui] .prose .tok-num, .prose .tok-num { color: var(--code-num) !important; }
+[data-ui] .prose .tok-fn, .prose .tok-fn { color: var(--code-fn) !important; }
+[data-ui] .prose .tok-key, .prose .tok-key { color: var(--code-fn) !important; }
+
+/* ---------------- 深色适配 ---------------- */
+[data-theme='dark'] .prose .code-block {
+  box-shadow: none;
+}
+[data-theme='dark'] .prose .term-dots i {
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, .1);
+}
+
+/* ---------------- 移动端 ---------------- */
+@media (max-width: 720px) {
+  .prose .code-bar { height: 30px; padding: 0 var(--sp-3); }
+  .prose .term-dots i { width: 9px; height: 9px; }
+  .prose .code-block pre.code { font-size: 12px; }
+  .prose .code-ln { width: 2.2em; padding-right: .6em; margin-right: .6em; }
+  .prose .code-copy, .prose .code-fold { opacity: 1; height: 24px; }
+}

@@ -1,0 +1,1330 @@
+/* ============================================================
+ * HJSEC · 体验优化层（v5.8）
+ *   1. 登录 / 注册 / 重置密码的表单体验
+ *   2. 周报阅读字体
+ *   3. 自定义鼠标光标
+ *   4. 公告框放大（大屏可读）
+ * 最后加载，用于收敛前面模块。
+ * ============================================================ */
+
+:root {
+  /* 阅读字体：优先霞鹜文楷（若设备已装），退回思源宋体 / 宋体 */
+  --font-reading: "LXGW WenKai", "LXGW WenKai Screen", "Noto Serif SC", "Source Han Serif SC",
+    "Songti SC", "SimSun", Georgia, serif;
+  --auth-field-h: 44px;
+}
+
+/* ============================================================
+ * 一、表单体验（登录 / 注册 / 忘记密码共用）
+ * ============================================================ */
+
+.gh-auth-card .term-input,
+.gh-auth-card input[type='text'],
+.gh-auth-card input[type='password'],
+.gh-auth-card input[type='email'],
+.gh-auth-card input:not([type='checkbox']) {
+  height: var(--auth-field-h) !important;
+  padding: 0 14px !important;
+  font-size: 14.5px !important;
+  border-radius: 10px !important;
+  transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+.gh-auth-card input::placeholder { color: #9aa9ba !important; }
+[data-theme='dark'] .gh-auth-card input::placeholder { color: #7d8ea3 !important; }
+
+/* 输入框前的字段名更醒目 */
+.gh-auth-card .term-label,
+.gh-auth-card label,
+.gh-auth-card .term-tip {
+  font-size: 12.5px !important;
+  color: #4a5b6e !important;
+  letter-spacing: .01em;
+}
+[data-theme='dark'] .gh-auth-card .term-label,
+[data-theme='dark'] .gh-auth-card label,
+[data-theme='dark'] .gh-auth-card .term-tip { color: #9fb3c9 !important; }
+
+/* 主按钮：满宽、44 高、按压缩放 */
+#auth-submit {
+  width: 100% !important;
+  height: 44px !important;
+  font-size: 15px !important;
+  border-radius: 10px !important;
+  margin-top: 6px !important;
+}
+#auth-submit:active { transform: scale(.985) !important; }
+#auth-submit:disabled { opacity: .72; cursor: not-allowed; animation: none !important; }
+
+/* 错误/成功提示：做成可读的提示条 */
+.gh-auth-card .auth-error,
+.gh-auth-card .form-error,
+.gh-auth-card .auth-msg {
+  display: block;
+  margin: 10px 0 2px;
+  padding: 9px 12px;
+  border-radius: 9px;
+  background: rgba(207, 34, 46, 0.08);
+  border: 1px solid rgba(207, 34, 46, 0.18);
+  color: #b31d28;
+  font-size: 12.8px;
+  line-height: 1.6;
+}
+.gh-auth-card .auth-ok {
+  background: rgba(34, 134, 58, 0.08);
+  border-color: rgba(34, 134, 58, 0.2);
+  color: #116329;
+}
+[data-theme='dark'] .gh-auth-card .auth-error,
+[data-theme='dark'] .gh-auth-card .form-error { color: #fdaeb7; }
+[data-theme='dark'] .gh-auth-card .auth-ok { color: #7ee787; }
+
+/* 验证码一行：图片与输入框等高 */
+.gh-auth-card .captcha-row { gap: 10px; align-items: center; }
+.gh-auth-card .captcha-row img,
+.gh-auth-card .captcha-img {
+  height: var(--auth-field-h) !important;
+  border-radius: 10px;
+  border: 1px solid rgba(58, 110, 165, 0.16);
+  background: #fff;
+}
+
+/* 底部链接（忘记密码 / 立即注册）更易点 */
+.gh-auth-links { margin-top: 12px; gap: 10px; }
+.gh-auth-links button,
+.gh-auth-links a {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  transition: background .16s ease, color .16s ease;
+}
+.gh-auth-links button:hover,
+.gh-auth-links a:hover { background: rgba(58, 110, 165, 0.1); }
+
+/* 注册页字段多：桌面端两列并排，减少滚动 */
+@media (min-width: 861px) {
+  .gh-auth-card .auth-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 12px;
+  }
+  .gh-auth-card .auth-grid .col-span-2 { grid-column: span 2; }
+}
+
+/* 小屏：登录卡片更紧凑，底部按钮不被键盘顶掉 */
+@media (max-width: 860px) {
+  .gh-auth-card { border-radius: 14px; }
+  .gh-auth-card .term-input,
+  .gh-auth-card input:not([type='checkbox']) { height: 46px !important; font-size: 15px !important; }
+  #auth-submit { height: 46px !important; }
+}
+
+/* ============================================================
+ * 二、周报阅读字体（更耐看的中文衬线 + 标点压缩）
+ * ============================================================ */
+
+html[data-ui] .prose,
+.prose {
+  font-family: var(--font-reading) !important;
+  font-size: 17.8px;
+  line-height: 1.95;
+  letter-spacing: .012em;
+  font-feature-settings: 'palt' 1, 'kern' 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+html[data-ui] .prose p, .prose p,
+html[data-ui] .prose li, .prose li { line-height: 1.95; }
+html[data-ui] .prose strong, .prose strong { font-weight: 700; }
+
+/* 段落首行不做缩进，但段间给足呼吸 */
+html[data-ui] .prose p + p, .prose p + p { margin-top: 0; }
+
+/* 标题用同一族，字重与字距收一点 */
+html[data-ui] .prose h1, .prose h1,
+html[data-ui] .prose h2, .prose h2,
+html[data-ui] .prose h3, .prose h3 { font-family: var(--font-reading) !important; letter-spacing: -.005em; }
+
+/* 代码仍然等宽 */
+html[data-ui] .prose code, .prose code,
+html[data-ui] .prose kbd, .prose kbd { font-family: var(--cup-font-code) !important; }
+
+@media (max-width: 900px) {
+  html[data-ui] .prose, .prose { font-size: 16.6px; line-height: 1.9; }
+}
+
+/* ============================================================
+ * 三、鼠标光标美化（SVG 内联，无额外请求）
+ *   默认箭头：白底深描边 + 柔和投影；可点区域：手型
+ * ============================================================ */
+
+html,
+body {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'><path d='M5 3.2 L20.2 13.4 L13.6 14.4 L16.9 21.6 L14.1 22.9 L10.9 15.7 L6.4 19.6 Z' fill='%23ffffff' stroke='%232c3a4b' stroke-width='1.6' stroke-linejoin='round'/></svg>") 5 3, auto;
+}
+
+a,
+button,
+.btn,
+[role='button'],
+summary,
+label[for],
+.chip,
+.nav-item,
+.read-row,
+.member-card,
+.feed-card,
+.toc-link,
+.m-dock-item,
+.dropdown-item,
+.gh-nav-item,
+.zh-nav a,
+.switch,
+.theme-card,
+.cmt-more,
+.read-cmt {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><path d='M9 3.6c1.1 0 1.9.8 1.9 1.9v6.2l1.2-.3c.7-.2 1.4 0 1.9.4l2.6 2.1c.5.4.8 1 .8 1.6v5.1c0 1.7-1.4 3.1-3.1 3.1h-3.9c-1 0-1.9-.5-2.5-1.3l-3.2-4.5c-.5-.7-.3-1.7.4-2.2.6-.4 1.4-.3 1.9.2l1.2 1.2V5.5c0-1.1.8-1.9 1.9-1.9z' fill='%23ffffff' stroke='%232c3a4b' stroke-width='1.5' stroke-linejoin='round'/></svg>") 10 4, pointer;
+}
+
+input,
+textarea,
+select,
+[contenteditable='true'] {
+  cursor: text;
+}
+
+input[type='checkbox'],
+input[type='radio'] { cursor: pointer; }
+
+/* 拖拽手柄、禁用态保持语义 */
+[disabled],
+.disabled,
+.is-disabled { cursor: not-allowed !important; }
+.ew-resize,
+[data-resize] { cursor: col-resize; }
+
+/* 触屏设备不要自定义光标（避免误伤） */
+@media (pointer: coarse) {
+  html, body, a, button, .btn, [role='button'] { cursor: auto; }
+}
+
+/* ============================================================
+ * 四、公告框放大
+ * ============================================================ */
+
+.modal.notice-modal,
+.notice-modal {
+  max-width: 860px !important;
+  width: calc(100vw - 48px) !important;
+  border-radius: 18px !important;
+  padding: 0 !important;
+  box-shadow: 0 24px 64px rgba(16, 32, 56, 0.24), 0 0 0 1px rgba(58, 110, 165, 0.08) !important;
+}
+.notice-modal h3 {
+  font-family: var(--font-reading);
+  font-size: 21px !important;
+  font-weight: 700;
+  padding: 22px 30px 14px !important;
+  letter-spacing: -.01em;
+  color: #08367c !important;
+}
+[data-theme='dark'] .notice-modal h3 { color: #8fb9f0 !important; }
+
+.notice-modal .notice-body,
+.notice-modal .notice-body.prose {
+  padding: 4px 30px 22px !important;
+  max-height: min(64vh, 620px) !important;
+  overflow-y: auto !important;
+  font-size: 15.4px !important;
+  line-height: 1.88 !important;
+  font-family: var(--font-reading);
+  color: #1a1e24 !important;
+}
+[data-theme='dark'] .notice-modal .notice-body,
+[data-theme='dark'] .notice-modal .notice-body.prose { color: #e8ecf2 !important; }
+
+.notice-modal .notice-body h1,
+.notice-modal .notice-body h2 {
+  font-size: 17px !important;
+  margin: 18px 0 8px !important;
+  padding: 0 !important;
+  border: none !important;
+  color: #004faa !important;
+}
+[data-theme='dark'] .notice-modal .notice-body h1,
+[data-theme='dark'] .notice-modal .notice-body h2 { color: #7aade6 !important; }
+
+.notice-modal .notice-body ul,
+.notice-modal .notice-body ol { padding-left: 1.35em !important; margin: 6px 0 12px !important; }
+.notice-modal .notice-body li { margin: 5px 0 !important; line-height: 1.8 !important; }
+
+.notice-modal .notice-act {
+  padding: 16px 30px 20px !important;
+  gap: 12px;
+  border-top: 1px solid rgba(58, 110, 165, 0.1);
+}
+.notice-modal .notice-act .btn { min-height: 38px; padding: 0 20px; border-radius: 10px; }
+
+@media (max-width: 900px) {
+  .modal.notice-modal,
+  .notice-modal {
+    width: calc(100vw - 20px) !important;
+    max-width: none !important;
+    max-height: 88vh !important;
+  }
+  .notice-modal h3 { font-size: 18px !important; padding: 18px 18px 10px !important; }
+  .notice-modal .notice-body,
+  .notice-modal .notice-body.prose {
+    padding: 2px 18px 16px !important;
+    font-size: 15px !important;
+    max-height: 62vh !important;
+  }
+  .notice-modal .notice-act { padding: 12px 18px 16px !important; }
+}
+
+/* ============================================================
+ * 五、评论条作为 .read-list 的兄弟节点（修列表行被挤乱）
+ * ============================================================ */
+
+.read-list > .cmt-strip {
+  flex: none !important;
+  margin: -8px 22px 16px 66px !important;
+  padding: 10px 14px;
+  border-radius: 10px;
+}
+.read-list > .read-row + .cmt-strip { border-top-left-radius: 0; }
+
+@media (max-width: 640px) {
+  .read-list > .cmt-strip { margin: -6px 12px 14px 12px !important; }
+}
+
+/* ============================================================
+ * 六、重置密码 / 验证码：发送按钮显眼 + 输入框回归正常样式
+ * ============================================================ */
+
+/* 邮箱验证码那一行：输入框 + 发送按钮并排 */
+.gh-auth-card .code-row,
+.gh-auth-card .captcha-row,
+.gh-auth-card .code-inline {
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+/* 把所有输入框拉回"整框描边"（含验证码这类被改成下划线的） */
+.gh-auth-card input:not([type='checkbox']):not([type='radio']) {
+  border: 1px solid rgba(58, 110, 165, 0.22) !important;
+  border-bottom-width: 1px !important;
+  border-radius: 10px !important;
+  background: rgba(255, 255, 255, 0.94) !important;
+  height: 44px !important;
+  box-shadow: none !important;
+}
+[data-theme='dark'] .gh-auth-card input:not([type='checkbox']):not([type='radio']) {
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-color: rgba(107, 159, 212, 0.26) !important;
+}
+
+/* 眼睛按钮：不再压在输入框里 */
+.gh-auth-card .term-eye,
+.gh-auth-card #pw-toggle,
+.gh-auth-card #pw-toggle2,
+.gh-auth-card #r-pw-toggle {
+  position: absolute !important;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  color: #5a6b80;
+  background: transparent;
+}
+.gh-auth-card .term-eye:hover { background: rgba(58, 110, 165, 0.1); color: #3a6ea5; }
+
+/* 「发送验证码」按钮：实心主色 + 图标位，醒目且禁用态可辨 */
+.gh-auth-card button[id*='code'],
+.gh-auth-card button[id*='send'],
+.gh-auth-card .btn-send-code,
+.gh-auth-card .code-send {
+  flex: 0 0 auto;
+  height: 44px !important;
+  padding: 0 16px !important;
+  border-radius: 10px !important;
+  background: #3a6ea5 !important;
+  border: 1px solid #3a6ea5 !important;
+  color: #fff !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: .01em;
+  box-shadow: 0 4px 12px rgba(58, 110, 165, 0.26);
+  white-space: nowrap;
+  transition: transform .16s ease, box-shadow .16s ease, opacity .16s ease;
+}
+.gh-auth-card button[id*='code']:hover,
+.gh-auth-card button[id*='send']:hover,
+.gh-auth-card .btn-send-code:hover,
+.gh-auth-card .code-send:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(58, 110, 165, 0.32);
+}
+.gh-auth-card button[id*='code']:disabled,
+.gh-auth-card button[id*='send']:disabled {
+  background: rgba(58, 110, 165, 0.35) !important;
+  border-color: transparent !important;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* 倒计时/提示文字：更亮更清楚 */
+.gh-auth-card .term-tip,
+.gh-auth-card .code-tip,
+.gh-auth-card .hint,
+.gh-auth-card .gh-auth-sub { color: #44566c !important; font-size: 12.8px !important; }
+[data-theme='dark'] .gh-auth-card .term-tip,
+[data-theme='dark'] .gh-auth-card .code-tip,
+[data-theme='dark'] .gh-auth-card .hint,
+[data-theme='dark'] .gh-auth-card .gh-auth-sub { color: #a9b8c9 !important; }
+
+/* ============================================================
+ * 七、周报正文：字体回正（无衬线，避开宋体）+ 文字更鲜艳 + 加彩色
+ * ============================================================ */
+
+:root {
+  --font-reading: "Noto Sans SC", "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei",
+    "Source Han Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+html[data-ui] .prose,
+.prose {
+  font-family: var(--font-reading) !important;
+  font-size: 17.5px;
+  line-height: 1.9;
+  color: #16202b !important;
+  letter-spacing: .006em;
+}
+[data-theme='dark'] html[data-ui] .prose,
+[data-theme='dark'] .prose { color: #eef4fa !important; }
+
+html[data-ui] .prose p, .prose p,
+html[data-ui] .prose li, .prose li { color: inherit !important; }
+
+/* 标题：衬线 + 更饱和的蓝 */
+html[data-ui] .prose h1, .prose h1 {
+  font-family: "Noto Serif SC", "Source Han Serif SC", Georgia, serif !important;
+  font-size: 1.85em !important;
+  color: #072f6b !important;
+  background: none !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+html[data-ui] .prose h2, .prose h2 {
+  font-family: "Noto Serif SC", "Source Han Serif SC", Georgia, serif !important;
+  font-size: 1.45em !important;
+  color: #0a55b0 !important;
+}
+html[data-ui] .prose h3, .prose h3 {
+  font-size: 1.2em !important;
+  color: #0e6ac4 !important;
+}
+html[data-ui] .prose h4, .prose h4 { color: #1f7ad1 !important; }
+[data-theme='dark'] html[data-ui] .prose h1, [data-theme='dark'] .prose h1 { color: #a8cdf5 !important; }
+[data-theme='dark'] html[data-ui] .prose h2, [data-theme='dark'] .prose h2 { color: #8fc0f0 !important; }
+[data-theme='dark'] html[data-ui] .prose h3, [data-theme='dark'] .prose h3 { color: #7ab2e8 !important; }
+
+/* 加彩色：h3 前小色块、h2 左侧渐变条更粗 */
+html[data-ui] .prose h2, .prose h2 { padding-left: 18px !important; }
+html[data-ui] .prose h2::before, .prose h2::before { width: 5px !important; }
+html[data-ui] .prose h3, .prose h3 { position: relative; padding-left: 14px; }
+html[data-ui] .prose h3::before, .prose h3::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: .42em;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: linear-gradient(135deg, #38dbd6, #3a6ea5);
+}
+
+/* 加彩色：强调句渐变下划 */
+html[data-ui] .prose strong, .prose strong {
+  color: #0a141f !important;
+  font-weight: 700;
+  background: linear-gradient(180deg, transparent 62%, rgba(127, 211, 232, 0.5) 62%);
+  padding: 0 1px;
+}
+[data-theme='dark'] html[data-ui] .prose strong,
+[data-theme='dark'] .prose strong {
+  color: #ffffff !important;
+  background: linear-gradient(180deg, transparent 62%, rgba(58, 110, 165, 0.55) 62%);
+}
+
+/* 加彩色：链接常显彩色下划 + 悬停变色 */
+html[data-ui] .prose a, .prose a {
+  color: #1668b8 !important;
+  background-image: linear-gradient(90deg, #1668b8, #38dbd6);
+  background-size: 100% 1.5px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  padding-bottom: 1px;
+}
+html[data-ui] .prose a:hover, .prose a:hover { color: #0b4c8c !important; background-size: 100% 2.5px; }
+
+/* 加彩色：表格斑马 + 首列强调 */
+html[data-ui] .prose tbody tr:nth-child(odd) td, .prose tbody tr:nth-child(odd) td {
+  background: rgba(58, 110, 165, 0.045);
+}
+html[data-ui] .prose tbody td:first-child, .prose tbody td:first-child {
+  color: #0a3d78 !important;
+  font-weight: 600;
+}
+[data-theme='dark'] html[data-ui] .prose tbody td:first-child,
+[data-theme='dark'] .prose tbody td:first-child { color: #a8cdf5 !important; }
+
+/* 加彩色：列表圆点/序号更饱和 */
+html[data-ui] .prose ul > li::marker, .prose ul > li::marker { color: #1f8ad6; font-size: 1.1em; }
+html[data-ui] .prose ol > li::marker, .prose ol > li::marker { color: #1f8ad6; font-weight: 700; }
+
+/* 加彩色：标签胶囊 */
+html[data-ui] .prose .md-tag, .prose .md-tag {
+  background: linear-gradient(120deg, rgba(56, 219, 214, 0.16), rgba(58, 110, 165, 0.14));
+  color: #0d5c8f !important;
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-weight: 600;
+}
+
+/* ============================================================
+ * 八、写周报页（编辑器）优化
+ * ============================================================ */
+
+#editor-workspace {
+  font-family: var(--font-reading);
+}
+#editor-workspace .ew-input,
+#editor-workspace .input,
+#editor-workspace input[type='text'],
+#editor-workspace select {
+  height: 40px !important;
+  border-radius: 9px !important;
+  border: 1px solid rgba(58, 110, 165, 0.2) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  font-size: 14px !important;
+}
+#editor-workspace input::placeholder,
+#editor-workspace textarea::placeholder { color: #93a3b5 !important; }
+
+/* 正文编辑区：更大字号、更松行高、更亮的字 */
+#editor-workspace #f-content,
+#editor-workspace .md-rich,
+#editor-workspace .ew-editor-pane textarea {
+  font-family: var(--cup-font-code), var(--font-reading) !important;
+  font-size: 15px !important;
+  line-height: 1.95 !important;
+  color: #16202b !important;
+  padding: 18px 20px !important;
+}
+[data-theme='dark'] #editor-workspace #f-content,
+[data-theme='dark'] #editor-workspace .md-rich,
+[data-theme='dark'] #editor-workspace .ew-editor-pane textarea { color: #eef4fa !important; }
+
+/* 工具栏按钮：胶囊化，悬停有色 */
+#editor-workspace .ob-tb,
+#editor-workspace .ob-btn {
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  height: 30px !important;
+  transition: background .16s ease, color .16s ease, transform .16s ease;
+}
+#editor-workspace .ob-tb:hover,
+#editor-workspace .ob-btn:hover {
+  background: rgba(58, 110, 165, 0.14) !important;
+  color: #0b4c8c !important;
+}
+#editor-workspace .ob-tb:active { transform: scale(.96); }
+
+/* 模式切换：选中态用主色实心 */
+#editor-workspace .seg button.active,
+#editor-workspace .md-mode-switch button.active {
+  background: #3a6ea5 !important;
+  color: #fff !important;
+  border-color: #3a6ea5 !important;
+}
+
+/* 提示行更亮 */
+#editor-workspace .ob-hint,
+#editor-workspace .ob-hint-inline,
+#editor-workspace .ob-toolbar-hint,
+#editor-workspace .ew-hint {
+  color: #44566c !important;
+  font-size: 12.5px !important;
+}
+[data-theme='dark'] #editor-workspace .ob-hint,
+[data-theme='dark'] #editor-workspace .ob-hint-inline,
+[data-theme='dark'] #editor-workspace .ob-toolbar-hint,
+[data-theme='dark'] #editor-workspace .ew-hint { color: #a9b8c9 !important; }
+
+@media (max-width: 900px) {
+  html[data-ui] .prose, .prose { font-size: 16.4px; line-height: 1.88; }
+  #editor-workspace #f-content,
+  #editor-workspace .md-rich,
+  #editor-workspace .ew-editor-pane textarea { font-size: 14.5px !important; padding: 14px !important; }
+}
+
+/* 发送验证码按钮：强制回到文档流，别绝对定位到卡片外面 */
+.gh-auth-card button[id*='code'],
+.gh-auth-card button[id*='send'],
+.gh-auth-card .btn-send-code,
+.gh-auth-card .code-send {
+  position: static !important;
+  right: auto !important;
+  left: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-width: 96px;
+  height: 44px !important;
+  margin: 0 !important;
+}
+/* 验证码行：输入框自适应 + 按钮贴右 */
+.gh-auth-card .code-row,
+.gh-auth-card .captcha-row,
+.gh-auth-card .code-inline {
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.gh-auth-card .code-row > input,
+.gh-auth-card .code-inline > input,
+.gh-auth-card .captcha-row > input { flex: 1 1 auto !important; min-width: 0; }
+
+/* ============================================================
+ * 九、列表条目容器（评论条终于有正确的父级）
+ * ============================================================ */
+
+.read-list { display: block !important; }
+
+.read-item { border-bottom: 1px solid rgba(58, 110, 165, 0.1); }
+.read-item:last-child { border-bottom: none; }
+.read-item > .read-row { border-bottom: none !important; }
+
+.read-item > .cmt-strip {
+  margin: 0 20px 14px 62px !important;
+  padding: 9px 13px;
+  border-radius: 9px;
+  background: rgba(58, 110, 165, 0.05);
+  border: 1px solid rgba(58, 110, 165, 0.07);
+}
+@media (max-width: 640px) {
+  .read-item > .cmt-strip { margin: 0 12px 12px !important; }
+}
+
+/* 列表里的 ♥ 可点 */
+.read-like {
+  background: none;
+  border: none;
+  padding: 1px 4px;
+  margin-left: -4px;
+  border-radius: 6px;
+  color: #3a6ea5 !important;
+  font: inherit;
+  font-size: 12px;
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><path d='M9 3.6c1.1 0 1.9.8 1.9 1.9v6.2l1.2-.3c.7-.2 1.4 0 1.9.4l2.6 2.1c.5.4.8 1 .8 1.6v5.1c0 1.7-1.4 3.1-3.1 3.1h-3.9c-1 0-1.9-.5-2.5-1.3l-3.2-4.5c-.5-.7-.3-1.7.4-2.2.6-.4 1.4-.3 1.9.2l1.2 1.2V5.5c0-1.1.8-1.9 1.9-1.9z' fill='%23ffffff' stroke='%232c3a4b' stroke-width='1.5' stroke-linejoin='round'/></svg>") 10 4, pointer;
+  transition: background .16s ease, color .16s ease, transform .16s ease;
+}
+.read-like:hover { background: rgba(214, 61, 92, 0.12); color: #d63d5c !important; }
+.read-like.liked { color: #d63d5c !important; font-weight: 600; }
+.read-like:active { transform: scale(.92); }
+[data-theme='dark'] .read-like { color: #8ab8e8 !important; }
+[data-theme='dark'] .read-like:hover,
+[data-theme='dark'] .read-like.liked { color: #f78ca0 !important; }
+
+/* ============================================================
+ * 十、周报渲染：更炫的字体与色彩（标题渐变色 + 更大字号）
+ * ============================================================ */
+
+html[data-ui] .prose,
+.prose {
+  font-size: 18px !important;
+  line-height: 1.92 !important;
+  letter-spacing: .012em;
+  color: #101c28 !important;
+}
+[data-theme='dark'] html[data-ui] .prose,
+[data-theme='dark'] .prose { color: #f2f7fc !important; }
+
+/* h1/h2 渐变色标题（更像杂志） */
+html[data-ui] .prose h1, .prose h1 {
+  font-family: "Noto Serif SC", "Source Han Serif SC", Georgia, serif !important;
+  font-size: 1.95em !important;
+  background: linear-gradient(100deg, #072f6b, #1a63b8 55%, #2f89d8) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  padding-bottom: .18em;
+  border-bottom: 2px solid rgba(58, 110, 165, 0.16);
+}
+html[data-ui] .prose h2, .prose h2 {
+  font-family: "Noto Serif SC", "Source Han Serif SC", Georgia, serif !important;
+  font-size: 1.5em !important;
+  background: linear-gradient(100deg, #0a55b0, #1f8ad6 70%, #38b6d6) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+[data-theme='dark'] html[data-ui] .prose h1, [data-theme='dark'] .prose h1 {
+  background: linear-gradient(100deg, #b7d8fb, #8fc0f0 60%, #6fb6ea) !important;
+  -webkit-background-clip: text !important; background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  border-bottom-color: rgba(107, 159, 212, 0.22);
+}
+[data-theme='dark'] html[data-ui] .prose h2, [data-theme='dark'] .prose h2 {
+  background: linear-gradient(100deg, #9cc9f5, #7fb6ea 70%, #63a8e0) !important;
+  -webkit-background-clip: text !important; background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* 正文里的数字/英文用等宽变体，读起来更有技术感 */
+html[data-ui] .prose code, .prose code { font-size: .88em !important; }
+
+@media (max-width: 900px) {
+  html[data-ui] .prose, .prose { font-size: 16.8px !important; line-height: 1.9 !important; }
+  html[data-ui] .prose h1, .prose h1 { font-size: 1.7em !important; }
+  html[data-ui] .prose h2, .prose h2 { font-size: 1.36em !important; }
+}
+
+/* ============================================================
+ * 十一、登录页重设计（更帅的排版）+ 自动填充修复
+ * ============================================================ */
+
+/* 修 Chrome 自动填充的黄底（截图里那两个黄框） */
+.gh-auth-card input:-webkit-autofill,
+.gh-auth-card input:-webkit-autofill:hover,
+.gh-auth-card input:-webkit-autofill:focus,
+.gh-auth-card input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #16202b !important;
+  caret-color: #16202b;
+  transition: background-color 9999s ease-out 0s;
+}
+[data-theme='dark'] .gh-auth-card input:-webkit-autofill,
+[data-theme='dark'] .gh-auth-card input:-webkit-autofill:hover,
+[data-theme='dark'] .gh-auth-card input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #1b2532 inset !important;
+  box-shadow: 0 0 0 1000px #1b2532 inset !important;
+  -webkit-text-fill-color: #eef4fa !important;
+}
+
+/* 左栏：终端风格 eyebrow */
+.auth-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 18px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(58, 110, 165, 0.16);
+  font-family: var(--cup-font-code);
+  font-size: 12px;
+  color: #2c5282;
+  letter-spacing: .02em;
+}
+.auth-eyebrow .prompt { color: #38b6a0; font-weight: 700; }
+.auth-eyebrow .arg { color: #3a6ea5; }
+.auth-eyebrow .caret {
+  width: 6px; height: 13px;
+  background: #3a6ea5;
+  border-radius: 1px;
+  animation: auth-caret 1.1s steps(1) infinite;
+}
+@keyframes auth-caret { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }
+[data-theme='dark'] .auth-eyebrow {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(107, 159, 212, 0.22);
+  color: #a8cdf5;
+}
+
+/* 标题：更大 + 关键词高亮 */
+.gh-auth-title,
+.gh-auth h1 {
+  font-size: clamp(30px, 3.1vw, 46px) !important;
+  line-height: 1.32 !important;
+  letter-spacing: -.02em !important;
+  margin: 0 0 18px !important;
+}
+.gh-auth-title .hl {
+  position: relative;
+  background: linear-gradient(100deg, #1a63b8, #2f89d8 60%, #38b6d6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.gh-auth-title .hl::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: .06em;
+  height: .28em;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(58, 182, 214, 0.35), rgba(58, 110, 165, 0.12));
+  z-index: -1;
+}
+
+/* 描述更松弛 */
+.gh-auth-desc {
+  font-size: 15px !important;
+  line-height: 2 !important;
+  max-width: 34em;
+  margin-bottom: 26px !important;
+}
+
+/* 特性：改成两行式卡片流，图标带渐变底 */
+.gh-auth-feats { gap: 12px; }
+.gh-auth-feats li {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(58, 110, 165, 0.08);
+  transition: transform .18s ease, background .18s ease, border-color .18s ease;
+}
+.gh-auth-feats li:hover {
+  transform: translateX(3px);
+  background: rgba(255, 255, 255, 0.62);
+  border-color: rgba(58, 110, 165, 0.2);
+}
+.gh-auth-feats .fi {
+  background: linear-gradient(140deg, rgba(56, 182, 214, 0.22), rgba(58, 110, 165, 0.16));
+  border-color: rgba(58, 110, 165, 0.14);
+  color: #1c5a96;
+}
+.gh-auth-feats b { font-size: 13.5px; }
+.gh-auth-feats span { color: #46586d; }
+[data-theme='dark'] .gh-auth-feats li {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(107, 159, 212, 0.12);
+}
+[data-theme='dark'] .gh-auth-feats li:hover { background: rgba(255, 255, 255, 0.09); }
+[data-theme='dark'] .gh-auth-feats span { color: #a9b8c9; }
+
+/* 底部签名 */
+.auth-sign {
+  margin-top: 26px;
+  font-family: var(--cup-font-code);
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #7c8ea1;
+}
+[data-theme='dark'] .auth-sign { color: #7d8ea3; }
+
+/* 右栏卡片：顶部渐变条 + 更强玻璃 */
+.gh-auth-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px !important;
+  padding: 30px 26px 24px !important;
+  box-shadow: 0 26px 64px rgba(16, 44, 80, 0.18), 0 0 0 1px rgba(58, 110, 165, 0.08) !important;
+}
+.gh-auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3a6ea5, #38b6d6, #7fd3e8, #3a6ea5);
+  background-size: 200% 100%;
+  animation: sf-shimmer 8s linear infinite;
+}
+
+/* 移动端：标题收一档，特性隐藏 */
+@media (max-width: 860px) {
+  .gh-auth-title, .gh-auth h1 { font-size: 1.6rem !important; }
+  .auth-eyebrow { font-size: 11.5px; }
+  .auth-sign { display: none; }
+}
+
+/* ============================================================
+ * 十二、自托管字体（思源宋体 SC 子集，436KB）
+ *   子集按站点实际用字生成：DB 全部周报 + 前端字符串 + ASCII/标点
+ *   文件：public/fonts/hjsec-serif.woff2
+ * ============================================================ */
+
+@font-face {
+  font-family: 'HJSerif';
+  src: url('/fonts/hjsec-serif.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-reading: "HJSerif", "Noto Serif SC", "Source Han Serif SC", "Songti SC", Georgia, serif;
+  --font-display: "HJSerif", "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+}
+
+/* 正文 / 标题统一自托管宋体 */
+html[data-ui] .prose,
+.prose,
+.article-title, .detail-title,
+html[data-ui] .prose h1, .prose h1,
+html[data-ui] .prose h2, .prose h2,
+html[data-ui] .prose h3, .prose h3,
+html[data-ui] .prose h4, .prose h4 {
+  font-family: var(--font-reading) !important;
+}
+
+/* 登录页标题也用它，保证"帅"的观感一致 */
+.gh-auth-title, .gh-auth h1, .gh-auth-card h2 { font-family: var(--font-display) !important; }
+
+/* 中文字形在宋体下略大，字号/行高微调 */
+html[data-ui] .prose,
+.prose { font-size: 17.4px !important; line-height: 1.95 !important; letter-spacing: .01em; }
+
+/* 代码与数字仍用等宽，避免宋体数字宽度跳变 */
+html[data-ui] .prose code, .prose code,
+html[data-ui] .prose kbd, .prose kbd,
+html[data-ui] .prose .code-block, .prose .code-block {
+  font-family: var(--cup-font-code) !important;
+}
+
+/* Vim 状态指示（编辑器内） */
+.vim-status {
+  position: sticky;
+  bottom: 8px;
+  float: right;
+  margin: 0 14px 8px 0;
+  padding: 2px 10px;
+  border-radius: 6px;
+  background: rgba(58, 110, 165, 0.12);
+  color: #3a6ea5;
+  font-family: var(--cup-font-code);
+  font-size: 11px;
+  letter-spacing: .08em;
+  pointer-events: none;
+  z-index: 5;
+}
+.vim-status.is-normal {
+  background: rgba(207, 122, 18, 0.14);
+  color: #a35b00;
+  font-weight: 700;
+}
+[data-theme='dark'] .vim-status { background: rgba(107, 159, 212, 0.18); color: #8ab8e8; }
+[data-theme='dark'] .vim-status.is-normal { background: rgba(255, 166, 87, 0.18); color: #ffa657; }
+
+/* ============================================================
+ * 十三、Markdown 再加一层炫酷（引用渐变条 / 代码光晕 / 表头渐变 / 装饰线）
+ * ============================================================ */
+
+/* 引用块：左侧渐变色条 + 半透明底色 + 大引号 */
+html[data-ui] .prose blockquote, .prose blockquote {
+  border-left: 4px solid transparent !important;
+  border-image: linear-gradient(180deg, #38b6d6, #3a6ea5) 1 !important;
+  background: linear-gradient(100deg, rgba(56, 182, 214, 0.09), rgba(58, 110, 165, 0.05)) !important;
+  border-radius: 0 10px 10px 0 !important;
+  padding: 14px 18px 14px 20px !important;
+  font-size: 1.01em !important;
+  color: #24405c !important;
+}
+[data-theme='dark'] html[data-ui] .prose blockquote,
+[data-theme='dark'] .prose blockquote {
+  background: linear-gradient(100deg, rgba(56, 182, 214, 0.14), rgba(58, 110, 165, 0.1)) !important;
+  color: #cfe3f5 !important;
+}
+
+/* 代码块：悬停时主色光晕更明显 + 顶部细渐变 */
+html[data-ui] .prose .code-block, .prose .code-block {
+  position: relative;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 12px rgba(58, 110, 165, 0.08) !important;
+  transition: box-shadow .22s ease, transform .22s ease;
+}
+html[data-ui] .prose .code-block:hover, .prose .code-block:hover {
+  box-shadow: 0 14px 36px rgba(58, 110, 165, 0.2) !important;
+  transform: translateY(-1px);
+}
+html[data-ui] .prose .code-block::before, .prose .code-block::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #38b6d6, #3a6ea5, #7fd3e8);
+  opacity: .8;
+}
+
+/* 表头：渐变底 + 白字 */
+html[data-ui] .prose th, .prose th {
+  background: linear-gradient(120deg, #3a6ea5, #4f8bc4 60%, #38b6d6) !important;
+  color: #fff !important;
+  border-bottom: none !important;
+  letter-spacing: .02em;
+}
+html[data-ui] .prose table, .prose table {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 8px rgba(58, 110, 165, 0.08);
+}
+
+/* 分割线：中间一颗小菱形 */
+html[data-ui] .prose hr, .prose hr {
+  position: relative;
+  height: 1px;
+  border: 0;
+  margin: 2.6em 0;
+  background: linear-gradient(90deg, transparent, rgba(58, 110, 165, 0.3), transparent);
+}
+html[data-ui] .prose hr::after, .prose hr::after {
+  content: '◆';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 9px;
+  color: #3a6ea5;
+  background: var(--cup-bg-primary, #fdfdfd);
+  padding: 0 8px;
+}
+
+/* 一级列表：加粗主色序号底片 */
+html[data-ui] .prose ol > li::marker, .prose ol > li::marker {
+  color: #17643c;
+  font-weight: 700;
+}
+html[data-ui] .prose ul > li::marker, .prose ul > li::marker { color: #1f8ad6; }
+
+/* 图片：悬停更明显的光晕 */
+html[data-ui] .prose img, .prose img {
+  transition: transform .26s ease, box-shadow .26s ease;
+}
+html[data-ui] .prose img:hover, .prose img:hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow: 0 16px 40px rgba(58, 110, 165, 0.26);
+}
+
+/* ============================================================
+ * 十四、两套皮肤统一（GitHub 皮肤此前没吃到这些样式）
+ * ============================================================ */
+
+html[data-ui='github'] .prose,
+html[data-ui='zhihu'] .prose,
+html[data-ui='github'] .article-title,
+html[data-ui='zhihu'] .article-title,
+html[data-ui='github'] .detail-title,
+html[data-ui='zhihu'] .detail-title {
+  font-family: var(--font-reading) !important;
+  color: #101c28 !important;
+}
+[data-theme='dark'][data-ui='github'] .prose,
+[data-theme='dark'][data-ui='zhihu'] .prose { color: #f2f7fc !important; }
+
+/* 标题渐变在 github 皮肤下也生效 */
+html[data-ui='github'] .prose h1, html[data-ui='zhihu'] .prose h1 {
+  background: linear-gradient(100deg, #072f6b, #1a63b8 55%, #2f89d8) !important;
+  -webkit-background-clip: text !important; background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  border-bottom: 2px solid rgba(58, 110, 165, 0.16) !important;
+}
+[data-theme='dark'][data-ui='github'] .prose h1,
+[data-theme='dark'][data-ui='zhihu'] .prose h1 {
+  background: linear-gradient(100deg, #b7d8fb, #8fc0f0 60%, #6fb6ea) !important;
+  -webkit-background-clip: text !important; background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* 表头渐变 / 引用渐变条 / 代码顶部细条：github 皮肤同步 */
+html[data-ui='github'] .prose th, html[data-ui='zhihu'] .prose th {
+  background: linear-gradient(120deg, #3a6ea5, #4f8bc4 60%, #38b6d6) !important;
+  color: #fff !important;
+}
+html[data-ui='github'] .prose blockquote, html[data-ui='zhihu'] .prose blockquote {
+  border-left: 4px solid transparent !important;
+  border-image: linear-gradient(180deg, #38b6d6, #3a6ea5) 1 !important;
+  border-radius: 0 10px 10px 0 !important;
+}
+html[data-ui='github'] .prose .code-block::before,
+html[data-ui='zhihu'] .prose .code-block::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, #38b6d6, #3a6ea5, #7fd3e8);
+}
+
+/* 两套皮肤的背景/侧栏一致性 */
+html[data-ui='github'] .gh-main,
+html[data-ui='zhihu'] .zh-main { background: transparent !important; }
+
+/* ============================================================
+ * 十五、阅读体验再打磨（更"杂志感"）
+ * ============================================================ */
+
+/* 正文列收窄到舒适阅读宽度，行宽不超过 42 字 */
+html[data-ui] .prose, .prose { max-width: 44em !important; }
+
+/* 首段做导语：略大、略深、带左侧细线 */
+html[data-ui] .prose > h1 + p,
+html[data-ui] .prose > p:first-of-type {
+  font-size: 1.06em !important;
+  color: #1b3550 !important;
+  padding-left: 14px;
+  border-left: 3px solid rgba(56, 182, 214, 0.55);
+  line-height: 1.95 !important;
+}
+[data-theme='dark'] html[data-ui] .prose > h1 + p,
+[data-theme='dark'] html[data-ui] .prose > p:first-of-type { color: #d6e6f6 !important; }
+
+/* 段落之间更松，标题上留白更大 */
+html[data-ui] .prose p, .prose p { margin-bottom: 1.25em !important; }
+html[data-ui] .prose h2, .prose h2 { margin-top: 2.3em !important; }
+html[data-ui] .prose h3, .prose h3 { margin-top: 1.9em !important; }
+
+/* 行内代码：彩色底 + 等宽 */
+html[data-ui] .prose :not(pre) > code,
+.prose :not(pre) > code {
+  background: linear-gradient(120deg, rgba(56, 182, 214, 0.14), rgba(58, 110, 165, 0.12)) !important;
+  color: #0d5c8f !important;
+  border: 1px solid rgba(58, 110, 165, 0.14) !important;
+  font-weight: 500;
+}
+[data-theme='dark'] html[data-ui] .prose :not(pre) > code,
+[data-theme='dark'] .prose :not(pre) > code {
+  background: rgba(107, 159, 212, 0.18) !important;
+  color: #a8cdf5 !important;
+  border-color: rgba(107, 159, 212, 0.2) !important;
+}
+
+/* 文章卡片：纸质感 + 更柔和的边界 */
+html[data-ui] .article-card, .article-card {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset,
+              0 10px 40px rgba(16, 44, 80, 0.08),
+              0 0 0 1px rgba(58, 110, 165, 0.07) !important;
+  border-radius: 16px !important;
+}
+[data-theme='dark'] html[data-ui] .article-card,
+[data-theme='dark'] .article-card {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset,
+              0 10px 40px rgba(0, 0, 0, 0.4),
+              0 0 0 1px rgba(107, 159, 212, 0.1) !important;
+}
+
+/* ============================================================
+ * 十六、去掉纯白底：纸张色 + 渐变 + 更炫的 Markdown
+ * ============================================================ */
+
+/* 文章卡：不是纯白，而是极浅的暖纸色 + 顶部微光 */
+html[data-ui] .article-card, .article-card {
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.9) 0%, rgba(252, 253, 255, 0) 60%),
+    linear-gradient(180deg, #fcfdff 0%, #f7fafd 100%) !important;
+  border: 1px solid rgba(58, 110, 165, 0.08) !important;
+}
+[data-theme='dark'] html[data-ui] .article-card,
+[data-theme='dark'] .article-card {
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(107, 159, 212, 0.08) 0%, rgba(0, 0, 0, 0) 60%),
+    linear-gradient(180deg, #1a2432 0%, #151d28 100%) !important;
+  border-color: rgba(107, 159, 212, 0.1) !important;
+}
+
+/* 正文区底色也带一点点层次，不是死白 */
+html[data-ui] .gh-main, html[data-ui] .zh-main {
+  background: linear-gradient(180deg, rgba(246, 250, 255, 0.55), rgba(240, 246, 253, 0.35)) !important;
+}
+[data-theme='dark'] html[data-ui] .gh-main,
+[data-theme='dark'] html[data-ui] .zh-main {
+  background: linear-gradient(180deg, rgba(14, 22, 33, 0.5), rgba(11, 17, 26, 0.4)) !important;
+}
+
+/* Markdown 更炫：h2 渐变下划线 + 章节序号前的装饰 */
+html[data-ui] .prose h2, .prose h2 {
+  position: relative;
+  padding-bottom: .35em;
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(90deg, rgba(58, 110, 165, 0.55), rgba(56, 182, 214, 0.12)) 1;
+}
+
+/* 段落里的英文/数字用主色微高亮 */
+html[data-ui] .prose p, .prose p { color: #16222e; }
+[data-theme='dark'] html[data-ui] .prose p,
+[data-theme='dark'] .prose p { color: #eef4fa; }
+
+/* 列表项：hover 时浅色底条，阅读时更好跟行 */
+html[data-ui] .prose li, .prose li {
+  border-radius: 6px;
+  transition: background .16s ease;
+}
+html[data-ui] .prose li:hover, .prose li:hover { background: rgba(58, 110, 165, 0.055); }
+
+/* 引用块再加一个大引号 */
+html[data-ui] .prose blockquote, .prose blockquote { position: relative; padding-right: 46px !important; }
+html[data-ui] .prose blockquote::after, .prose blockquote::after {
+  content: '”';
+  position: absolute;
+  top: 2px; right: 14px;
+  font-family: Georgia, serif;
+  font-size: 40px;
+  line-height: 1;
+  color: rgba(58, 110, 165, 0.18);
+}
+
+/* 代码块：深色玻璃在浅色页面上更有对比 */
+html[data-ui] .prose .code-block, .prose .code-block {
+  background: linear-gradient(180deg, #f8fbff, #eef5fc) !important;
+  border: 1px solid rgba(58, 110, 165, 0.14) !important;
+}
+[data-theme='dark'] html[data-ui] .prose .code-block,
+[data-theme='dark'] .prose .code-block {
+  background: linear-gradient(180deg, #101a26, #0c141e) !important;
+  border-color: rgba(107, 159, 212, 0.16) !important;
+}
+
+/* 图片：圆角更大 + 细边框 */
+html[data-ui] .prose img, .prose img {
+  border-radius: 12px !important;
+  border: 1px solid rgba(58, 110, 165, 0.1);
+}
+
+/* ============================================================
+ * 十七、周报卡片：不再"死白"，改磨砂玻璃 + 细点阵纹理
+ * ============================================================ */
+
+html[data-ui] .article-card, .article-card {
+  position: relative;
+  background-color: rgba(247, 251, 255, 0.72) !important;
+  background-image:
+    radial-gradient(circle at 18% 8%, rgba(120, 190, 255, 0.14), transparent 42%),
+    radial-gradient(circle at 82% 0%, rgba(180, 150, 255, 0.1), transparent 45%),
+    radial-gradient(rgba(58, 110, 165, 0.055) 1px, transparent 1px) !important;
+  background-size: auto, auto, 18px 18px !important;
+  background-position: 0 0, 0 0, 0 0 !important;
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid transparent !important;
+  border-image: linear-gradient(140deg, rgba(56, 182, 214, 0.5), rgba(58, 110, 165, 0.12) 40%, rgba(56, 182, 214, 0.4)) 1 !important;
+  border-radius: 18px !important;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 18px 48px rgba(16, 44, 80, 0.1),
+    0 2px 8px rgba(16, 44, 80, 0.04) !important;
+}
+/* 左上角一条渐变色带 */
+html[data-ui] .article-card::before, .article-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 22px; right: 22px;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(90deg, #38b6d6, #3a6ea5 45%, #7fd3e8);
+  opacity: .9;
+}
+
+[data-theme='dark'] html[data-ui] .article-card,
+[data-theme='dark'] .article-card {
+  background-color: rgba(20, 29, 42, 0.72) !important;
+  background-image:
+    radial-gradient(circle at 18% 8%, rgba(56, 130, 200, 0.18), transparent 42%),
+    radial-gradient(circle at 82% 0%, rgba(110, 90, 180, 0.14), transparent 45%),
+    radial-gradient(rgba(140, 180, 220, 0.06) 1px, transparent 1px) !important;
+  background-size: auto, auto, 18px 18px !important;
+  border-image: linear-gradient(140deg, rgba(107, 159, 212, 0.45), rgba(107, 159, 212, 0.1) 45%, rgba(56, 182, 214, 0.3)) 1 !important;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 18px 48px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* ============================================================
+ * 十八、Markdown 再加细节
+ * ============================================================ */
+
+/* h2 前加一个渐变小竖标 */
+html[data-ui] .prose h2, .prose h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+html[data-ui] .prose h2::before, .prose h2::before {
+  content: '';
+  flex: 0 0 auto;
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  transform: rotate(45deg);
+  background: linear-gradient(135deg, #38b6d6, #3a6ea5);
+  position: static !important;
+  inset: auto !important;
+  opacity: 1 !important;
+}
+
+/* 段落链接：常显细下划，悬停变粗 + 变青 */
+html[data-ui] .prose a, .prose a {
+  text-decoration: none;
+  border-bottom: 1px solid rgba(58, 110, 165, 0.35);
+  transition: color .16s ease, border-color .16s ease;
+}
+html[data-ui] .prose a:hover, .prose a:hover {
+  color: #0f8ba8 !important;
+  border-bottom: 2px solid #38b6d6;
+}
+
+/* 表格行悬停 */
+html[data-ui] .prose tbody tr:hover td, .prose tbody tr:hover td {
+  background: rgba(56, 182, 214, 0.1) !important;
+}
+
+/* kbd 键帽 */
+html[data-ui] .prose kbd, .prose kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 5px;
+  border: 1px solid rgba(58, 110, 165, 0.25);
+  border-bottom-width: 2px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: .84em;
+  font-family: var(--cup-font-code);
+  color: #2c5282;
+}
+[data-theme='dark'] html[data-ui] .prose kbd,
+[data-theme='dark'] .prose kbd {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(107, 159, 212, 0.3);
+  color: #a8cdf5;
+}
+
+/* 任务项勾选更明显 */
+html[data-ui] .prose .task-box, .prose .task-box {
+  border-width: 2px !important;
+  transition: background .16s ease, border-color .16s ease;
+}
+
+/* 覆盖更高权重的白色底（此前 html[data-ui] .article-card.card 0,2,2 把它压回去了） */
+html[data-ui] .article-card.card,
+html[data-ui] .article-card,
+[data-ui] .article-card.card,
+[data-ui] .article-card {
+  background-color: rgba(247, 251, 255, 0.72) !important;
+  background-image:
+    radial-gradient(circle at 18% 8%, rgba(120, 190, 255, 0.16), transparent 42%),
+    radial-gradient(circle at 82% 0%, rgba(180, 150, 255, 0.12), transparent 45%),
+    radial-gradient(rgba(58, 110, 165, 0.06) 1px, transparent 1px) !important;
+  background-size: auto, auto, 18px 18px !important;
+  -webkit-backdrop-filter: blur(18px) saturate(140%) !important;
+  backdrop-filter: blur(18px) saturate(140%) !important;
+  border: 1px solid transparent !important;
+  border-image: linear-gradient(140deg, rgba(56, 182, 214, 0.5), rgba(58, 110, 165, 0.12) 40%, rgba(56, 182, 214, 0.4)) 1 !important;
+  border-radius: 18px !important;
+}
+html[data-theme='dark'][data-ui] .article-card.card,
+html[data-theme='dark'][data-ui] .article-card,
+[data-theme='dark'] [data-ui] .article-card {
+  background-color: rgba(20, 29, 42, 0.74) !important;
+  background-image:
+    radial-gradient(circle at 18% 8%, rgba(56, 130, 200, 0.2), transparent 42%),
+    radial-gradient(circle at 82% 0%, rgba(110, 90, 180, 0.16), transparent 45%),
+    radial-gradient(rgba(140, 180, 220, 0.07) 1px, transparent 1px) !important;
+  border-image: linear-gradient(140deg, rgba(107, 159, 212, 0.45), rgba(107, 159, 212, 0.1) 45%, rgba(56, 182, 214, 0.3)) 1 !important;
+}
+
+/* h2 右侧那个多余的引号字符去掉 */
+html[data-ui] .prose h2::after, .prose h2::after { content: none !important; display: none !important; }

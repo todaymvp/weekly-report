@@ -1,0 +1,17 @@
+# 统一换行，避免 Windows 提交整文件 diff
+* text=auto eol=lf
+
+# 二进制
+*.woff2 binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.db binary
+
+# 文档
+*.md text eol=lf
+*.sh text eol=lf
+Dockerfile text eol=lf
